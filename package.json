@@ -26,7 +26,9 @@
     "typescript-eslint": "^8.26.0"
   },
   "dependencies": {
+    "dotenv": "^16.4.7",
     "fastify": "^5.2.1",
-    "gitignore": "^0.7.0"
+    "gitignore": "^0.7.0",
+    "zod": "^3.24.2"
   }
 }
