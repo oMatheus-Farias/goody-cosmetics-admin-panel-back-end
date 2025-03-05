@@ -7,7 +7,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Categorie {
+model Category {
   id        String   @id @default(uuid())
   name      String   @unique @db.VarChar(255)
   emoji     String   @db.VarChar(1)
@@ -31,7 +31,7 @@ model Product {
   productImage ProductImage[]
   saleItem     SaleItem[]
 
-  categories Categorie @relation(fields: [categoryId], references: [id])
+  categories Category @relation(fields: [categoryId], references: [id])
 
   @@map("products")
 }
