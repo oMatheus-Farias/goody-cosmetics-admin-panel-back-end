@@ -1,0 +1,10 @@
+services:
+  postgres:
+    image: postgres
+    container_name: goody-cosmetics-postgres
+    environment:
+      POSTGRES_PASSWORD: password
+      POSTGRES_USER: root
+      POSTGRES_DB: goody_cosmetics
+    ports:
+      - '5432:5432'
