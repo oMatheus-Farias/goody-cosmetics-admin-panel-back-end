@@ -1,0 +1,72 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Categorie {
+  id        String   @id @default(uuid())
+  name      String   @unique @db.VarChar(255)
+  emoji     String   @db.VarChar(1)
+  createdAt DateTime @default(now()) @map("created_at")
+
+  products Product[]
+
+  @@map("categories")
+}
+
+model Product {
+  id            String   @id @default(uuid())
+  categoryId    String   @db.VarChar(255)
+  name          String   @db.VarChar(255)
+  oldPrice      Float    @map("old_price")
+  currentPrice  Float    @map("current_price")
+  description   String   @db.Text
+  stockQuantity Int      @map("stock_quantity")
+  createdAt     DateTime @default(now()) @map("created_at")
+
+  productImage ProductImage[]
+  saleItem     SaleItem[]
+
+  categories Categorie @relation(fields: [categoryId], references: [id])
+
+  @@map("products")
+}
+
+model ProductImage {
+  id        String   @id @default(uuid())
+  productId String   @map("product_id") @db.VarChar(255)
+  url       String   @db.Text
+  createdAt DateTime @default(now()) @map("created_at")
+
+  product Product @relation(fields: [productId], references: [id])
+
+  @@map("product_images")
+}
+
+model Sale {
+  id        String   @id @default(uuid())
+  saleDate  DateTime @map("sale_date") @db.Timestamp(3)
+  createdAt DateTime @default(now()) @map("created_at")
+
+  saleItem SaleItem[]
+
+  @@map("sales")
+}
+
+model SaleItem {
+  id        String   @id @default(uuid())
+  saleId    String   @map("sale_id") @db.VarChar(255)
+  productId String   @map("product_id") @db.VarChar(255)
+  quantity  Int
+  unitPrice Float    @map("unit_price")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  sale    Sale    @relation(fields: [saleId], references: [id])
+  product Product @relation(fields: [productId], references: [id])
+
+  @@map("sale_items")
+}
