@@ -19,8 +19,5 @@ export const categoriesSchema = z.object({
     .trim()
     .min(1, {
       message: 'Emoji must have at least 1 character',
-    })
-    .max(1, {
-      message: 'Emoji must have at most 1 character',
     }),
 });
