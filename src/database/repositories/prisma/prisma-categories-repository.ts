@@ -12,6 +12,14 @@ export class PrismaCategoriesRepository implements CategoriesRepository {
       select: { id: true, name: true },
     });
   }
+  async findByName(
+    categoryName: string,
+  ): Promise<Pick<Category, 'id' | 'name'> | null> {
+    return await prisma.category.findUnique({
+      where: { name: categoryName },
+      select: { id: true, name: true },
+    });
+  }
   async findAllWithParams(
     page: number,
     searchTerm?: string,

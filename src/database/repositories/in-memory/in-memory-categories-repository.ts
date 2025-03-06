@@ -11,6 +11,14 @@ export class InMemoryCategoriesRepository implements CategoriesRepository {
     const category = this.items.find((category) => category.id === categoryId);
     return category || null;
   }
+  async findByName(
+    categoryName: string,
+  ): Promise<Pick<Category, 'id' | 'name'> | null> {
+    const category = this.items.find(
+      (category) => category.name === categoryName,
+    );
+    return category || null;
+  }
   async findAllWithParams(
     page: number,
     searchTerm?: string,

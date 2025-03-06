@@ -12,6 +12,9 @@ type TFindAllWithParams = {
 
 export interface CategoriesRepository {
   findById(categoryId: string): Promise<Pick<Category, 'id' | 'name'> | null>;
+  findByName(
+    categoryName: string,
+  ): Promise<Pick<Category, 'id' | 'name'> | null>;
   findAllWithParams(
     page: number,
     searchTerm?: string,
