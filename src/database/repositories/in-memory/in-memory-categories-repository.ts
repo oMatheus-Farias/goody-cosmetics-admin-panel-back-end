@@ -19,6 +19,9 @@ export class InMemoryCategoriesRepository implements CategoriesRepository {
     );
     return category || null;
   }
+  async findAll(): Promise<Category[] | null> {
+    return this.items || null;
+  }
   async findAllWithParams(
     page: number,
     searchTerm?: string,
