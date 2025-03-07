@@ -7,6 +7,34 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model User {
+  id                  String    @id @default(uuid())
+  firstName           String    @map("first_name") @db.VarChar(55)
+  lastName            String    @map("last_name") @db.VarChar(55)
+  email               String    @unique @db.VarChar(255)
+  role                UserRole
+  passwordHash        String    @map("password_hash") @db.VarChar(255)
+  resetToken          String?   @map("reset_token") @db.VarChar(255)
+  resetTokenExpiresAt DateTime? @map("reset_token_expires_at")
+  createdAt           DateTime  @default(now()) @map("created_at")
+
+  refreshToken RefreshToken[]
+
+  @@unique([firstName, lastName])
+  @@map("users")
+}
+
+model RefreshToken {
+  id        String   @id @default(uuid())
+  userId    String   @map("user_id") @db.VarChar(255)
+  createdAt DateTime @default(now()) @map("created_at")
+  expiresAt DateTime @map("expires_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("refresh_tokens")
+}
+
 model Category {
   id        String   @id @default(uuid())
   name      String   @unique @db.VarChar(255)
@@ -69,4 +97,10 @@ model SaleItem {
   product Product @relation(fields: [productId], references: [id])
 
   @@map("sale_items")
+}
+
+enum UserRole {
+  ROOT
+  ADMIN
+  USER
 }
