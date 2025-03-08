@@ -18,9 +18,22 @@ export class PrismaUsersRepository implements UsersRepository {
       },
     });
   }
-  async findByEmail(
-    email: string,
-  ): Promise<Pick<User, 'id' | 'email' | 'firstName' | 'lastName'> | null> {
+  async findByNames(
+    firstName: string,
+    lastName: string,
+  ): Promise<Pick<User, 'id' | 'email'> | null> {
+    return await prisma.user.findFirst({
+      where: {
+        firstName,
+        lastName,
+      },
+      select: {
+        id: true,
+        email: true,
+      },
+    });
+  }
+  async findByEmail(email: string): Promise<Pick<User, 'id' | 'email'> | null> {
     return await prisma.user.findUnique({
       where: {
         email,

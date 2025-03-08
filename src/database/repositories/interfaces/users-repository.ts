@@ -14,9 +14,11 @@ export interface UsersRepository {
   findById(
     userId: string,
   ): Promise<Pick<User, 'id' | 'firstName' | 'lastName'> | null>;
-  findByEmail(
-    email: string,
-  ): Promise<Pick<User, 'id' | 'email' | 'firstName' | 'lastName'> | null>;
+  findByNames(
+    firstName: string,
+    lastName: string,
+  ): Promise<Pick<User, 'id' | 'email'> | null>;
+  findByEmail(email: string): Promise<Pick<User, 'id' | 'email'> | null>;
   findAllWithParams(
     page: number,
     searchTerm?: string,
