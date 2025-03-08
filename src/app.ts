@@ -3,7 +3,7 @@ import Fastify from 'fastify';
 import { ZodError } from 'zod';
 
 import { env } from './configs/env';
-import { categoriesRoutes } from './http/routes/categories-routes';
+import { categoriesRoutes, usersRoutes } from './http/routes';
 
 export const app = Fastify();
 
@@ -11,6 +11,9 @@ export const prisma = new PrismaClient();
 
 app.register(categoriesRoutes, {
   prefix: '/api/categories',
+});
+app.register(usersRoutes, {
+  prefix: '/api/users',
 });
 
 app.setErrorHandler((error, _, reply) => {
