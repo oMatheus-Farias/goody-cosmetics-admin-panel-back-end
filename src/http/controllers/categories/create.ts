@@ -8,7 +8,7 @@ import { makeCreateCategoriesUseCase } from '../../../use-cases/_factories/categ
 export async function createCategoriesController(
   request: FastifyRequest,
   reply: FastifyReply,
-) {
+): Promise<FastifyReply> {
   try {
     const { name, emoji } = request.body as Prisma.CategoryCreateInput;
 
@@ -17,7 +17,7 @@ export async function createCategoriesController(
     const createCategoriesUseCase = makeCreateCategoriesUseCase();
     await createCategoriesUseCase.execute({ name, emoji });
 
-    reply.status(201).send({ message: 'Category created' });
+    return reply.status(201).send({ message: 'Category created' });
   } catch (error) {
     if (error instanceof AlreadyExistsError) {
       return reply.status(409).send({ error: error.message });
