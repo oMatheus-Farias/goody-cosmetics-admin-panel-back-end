@@ -12,7 +12,7 @@ model User {
   firstName           String    @map("first_name") @db.VarChar(55)
   lastName            String    @map("last_name") @db.VarChar(55)
   email               String    @unique @db.VarChar(255)
-  role                UserRole
+  role                UserRole  @default(ADMIN)
   passwordHash        String    @map("password_hash") @db.VarChar(255)
   resetToken          String?   @map("reset_token") @db.VarChar(255)
   resetTokenExpiresAt DateTime? @map("reset_token_expires_at")
@@ -102,5 +102,4 @@ model SaleItem {
 enum UserRole {
   ROOT
   ADMIN
-  USER
 }
