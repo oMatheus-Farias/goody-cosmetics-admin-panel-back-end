@@ -18,7 +18,7 @@ export interface UsersRepository {
     firstName: string,
     lastName: string,
   ): Promise<Pick<User, 'id' | 'email'> | null>;
-  findByEmail(email: string): Promise<Pick<User, 'id' | 'email'> | null>;
+  findByEmail(email: string): Promise<User | null>;
   findAllWithParams(
     page: number,
     searchTerm?: string,
