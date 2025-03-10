@@ -23,12 +23,7 @@ describe('Create User', () => {
     passwordHasher = new PasswordHasherAdapter();
     sut = new CreateUsersUseCase(userRepo, passwordHasher);
 
-    await sut.execute({
-      firstName: userData.firstName,
-      lastName: userData.lastName,
-      email: userData.email,
-      passwordHash: userData.passwordHash,
-    });
+    await sut.execute(userData);
   });
 
   it('should be able create user', async () => {
@@ -42,10 +37,8 @@ describe('Create User', () => {
 
     await expect(
       sut.execute({
+        ...userData,
         firstName: otherUserFirstName,
-        lastName: userData.lastName,
-        email: userData.email,
-        passwordHash: userData.passwordHash,
       }),
     ).rejects.toBeInstanceOf(AlreadyExistsError);
   });
@@ -55,10 +48,8 @@ describe('Create User', () => {
 
     await expect(
       sut.execute({
-        firstName: userData.firstName,
-        lastName: userData.lastName,
+        ...userData,
         email: otherUserEmail,
-        passwordHash: userData.passwordHash,
       }),
     ).rejects.toBeInstanceOf(AlreadyExistsError);
   });
