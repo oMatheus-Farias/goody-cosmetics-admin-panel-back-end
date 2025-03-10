@@ -12,6 +12,7 @@ export async function createCategoriesController(
   try {
     const { name, emoji } = request.body as Prisma.CategoryCreateInput;
 
+    //TODO: remove emojis the endpoint
     await categoriesSchema.parseAsync({ name, emoji });
 
     const createCategoriesUseCase = makeCreateCategoriesUseCase();
