@@ -1,3 +1,4 @@
+import fastifyJwt from '@fastify/jwt';
 import { PrismaClient } from '@prisma/client';
 import Fastify from 'fastify';
 import { ZodError } from 'zod';
@@ -8,6 +9,10 @@ import { categoriesRoutes, sessionsRoutes, usersRoutes } from './http/routes';
 export const app = Fastify();
 
 export const prisma = new PrismaClient();
+
+app.register(fastifyJwt, {
+  secret: env.JWT_SECRET,
+});
 
 app.register(usersRoutes, {
   prefix: '/api/users',
