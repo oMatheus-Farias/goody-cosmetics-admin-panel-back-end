@@ -6,7 +6,7 @@ import type {
 } from '../../database/repositories/interfaces';
 import { CredentialsError } from '../../errors';
 import type { AuthUsersDto } from './dtos/auth-users-dto';
-import type { UserData } from './interfaces/user-data';
+import type { IReturnUseCaseData } from './interfaces/return-user-case-data copy';
 
 export class AuthUsersUseCase {
   constructor(
@@ -15,7 +15,7 @@ export class AuthUsersUseCase {
     private readonly passwordCompare: PasswordCompare,
   ) {}
 
-  async execute(data: AuthUsersDto): Promise<UserData> {
+  async execute(data: AuthUsersDto): Promise<IReturnUseCaseData> {
     const user = await this.usersRepo.findByEmail(data.email);
 
     if (!user) {
@@ -49,11 +49,8 @@ export class AuthUsersUseCase {
       expiresAt: expiresAtRefreshToken,
     });
 
-    const userData: UserData = {
+    const userData: IReturnUseCaseData = {
       id: user.id,
-      firstName: user.firstName,
-      lastName: user.lastName,
-      email: user.email,
       role: user.role,
       refreshToken,
     };
