@@ -4,6 +4,7 @@ import type { PasswordHasher } from '../../adapters/interfaces/password-hasher';
 import { PasswordHasherAdapter } from '../../adapters/password-hasher-adapter';
 import { InMemoryUsersRepository } from '../../database/repositories/in-memory';
 import type { UsersRepository } from '../../database/repositories/interfaces';
+import { AlreadyExistsError } from '../../errors';
 import { CreateUsersUseCase } from './create';
 
 let userRepo: UsersRepository;
@@ -34,5 +35,18 @@ describe('Create User', () => {
     const user = await userRepo.findByEmail(userData.email);
 
     expect(user).not.toBe(null);
+  });
+
+  it('should throw error if email is already in use', async () => {
+    const otherUserFirstName = 'Jane';
+
+    await expect(
+      sut.execute({
+        firstName: otherUserFirstName,
+        lastName: userData.lastName,
+        email: userData.email,
+        passwordHash: userData.passwordHash,
+      }),
+    ).rejects.toBeInstanceOf(AlreadyExistsError);
   });
 });
