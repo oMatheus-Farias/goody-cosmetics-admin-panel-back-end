@@ -49,4 +49,17 @@ describe('Create User', () => {
       }),
     ).rejects.toBeInstanceOf(AlreadyExistsError);
   });
+
+  it('should throw error if names are already in use', async () => {
+    const otherUserEmail = 'janedoe@email.com';
+
+    await expect(
+      sut.execute({
+        firstName: userData.firstName,
+        lastName: userData.lastName,
+        email: otherUserEmail,
+        passwordHash: userData.passwordHash,
+      }),
+    ).rejects.toBeInstanceOf(AlreadyExistsError);
+  });
 });
