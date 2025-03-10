@@ -7,7 +7,7 @@ import type { UsersRepository } from '../../database/repositories/interfaces';
 import { AlreadyExistsError } from '../../errors';
 import { CreateUsersUseCase } from './create';
 
-let userRepo: UsersRepository;
+let usersRepo: UsersRepository;
 let passwordHasher: PasswordHasher;
 let sut: CreateUsersUseCase;
 const userData = {
@@ -19,15 +19,15 @@ const userData = {
 
 describe('Create User', () => {
   beforeEach(async () => {
-    userRepo = new InMemoryUsersRepository();
+    usersRepo = new InMemoryUsersRepository();
     passwordHasher = new PasswordHasherAdapter();
-    sut = new CreateUsersUseCase(userRepo, passwordHasher);
+    sut = new CreateUsersUseCase(usersRepo, passwordHasher);
 
     await sut.execute(userData);
   });
 
   it('should be able create user', async () => {
-    const user = await userRepo.findByEmail(userData.email);
+    const user = await usersRepo.findByEmail(userData.email);
 
     expect(user).not.toBe(null);
   });
