@@ -10,13 +10,12 @@ export async function createCategoriesController(
   reply: FastifyReply,
 ): Promise<FastifyReply> {
   try {
-    const { name, emoji } = request.body as Prisma.CategoryCreateInput;
+    const { name } = request.body as Prisma.CategoryCreateInput;
 
-    //TODO: remove emojis the endpoint
-    await categoriesSchema.parseAsync({ name, emoji });
+    await categoriesSchema.parseAsync({ name });
 
     const createCategoriesUseCase = makeCreateCategoriesUseCase();
-    await createCategoriesUseCase.execute({ name, emoji });
+    await createCategoriesUseCase.execute({ name });
 
     return reply.status(201).send({ message: 'Category created' });
   } catch (error) {
