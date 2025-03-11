@@ -1,3 +1,4 @@
+import type { $Enums } from '@prisma/client';
 import { beforeEach, describe, expect, it } from 'vitest';
 
 import type { PasswordHasher } from '../../adapters/interfaces/password-hasher';
@@ -14,7 +15,8 @@ const userData = {
   firstName: 'John',
   lastName: 'Doe',
   email: 'johndoe@email.com',
-  passwordHash: 'password',
+  password: 'password',
+  role: 'ADMIN' as $Enums.UserRole,
 };
 
 describe('Create User', () => {
