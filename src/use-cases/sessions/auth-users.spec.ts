@@ -64,4 +64,12 @@ describe('Auth User', () => {
       sut.execute({ email, password: userData.password }),
     ).rejects.toBeInstanceOf(CredentialsError);
   });
+
+  it('should throw error if password invalid', async () => {
+    const password = 'invalid-password';
+
+    await expect(
+      sut.execute({ email: userData.email, password }),
+    ).rejects.toBeInstanceOf(CredentialsError);
+  });
 });
