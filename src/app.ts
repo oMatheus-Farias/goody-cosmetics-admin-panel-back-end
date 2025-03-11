@@ -4,7 +4,12 @@ import Fastify from 'fastify';
 import { ZodError } from 'zod';
 
 import { env } from './configs/env';
-import { categoriesRoutes, sessionsRoutes, usersRoutes } from './http/routes';
+import {
+  categoriesRoutes,
+  refreshTokensRoutes,
+  sessionsRoutes,
+  usersRoutes,
+} from './http/routes';
 
 export const app = Fastify();
 
@@ -22,6 +27,9 @@ app.register(sessionsRoutes, {
 });
 app.register(categoriesRoutes, {
   prefix: '/api/categories',
+});
+app.register(refreshTokensRoutes, {
+  prefix: '/api/refresh-tokens',
 });
 
 app.setErrorHandler((error, _, reply) => {
