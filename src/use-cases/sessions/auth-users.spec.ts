@@ -14,6 +14,7 @@ import type {
   RefreshTokensRepository,
   UsersRepository,
 } from '../../database/repositories/interfaces';
+import { CredentialsError } from '../../errors';
 import { CreateUsersUseCase } from '../users/create';
 import { AuthUsersUseCase } from './auth-users';
 
@@ -54,5 +55,13 @@ describe('Auth User', () => {
     });
 
     expect(user).not.toBe(null);
+  });
+
+  it('should throw error if email invalid', async () => {
+    const email = 'invalid-email';
+
+    await expect(
+      sut.execute({ email, password: userData.password }),
+    ).rejects.toBeInstanceOf(CredentialsError);
   });
 });
