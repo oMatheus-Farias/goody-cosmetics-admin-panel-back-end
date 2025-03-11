@@ -1,5 +1,7 @@
 import type { Prisma, User } from '@prisma/client';
 
+import type { ICreateUsersDto } from '../../../use-cases/users/dtos/create-users-dto';
+
 type TFindAllWithParams = {
   users: User[] | null;
   meta: {
@@ -23,7 +25,7 @@ export interface UsersRepository {
     page: number,
     searchTerm?: string,
   ): Promise<TFindAllWithParams>;
-  create(data: Prisma.UserCreateInput): Promise<void>;
+  create(data: ICreateUsersDto): Promise<void>;
   update(userId: string, data: Prisma.UserUpdateInput): Promise<void>;
   updatePassword(
     userId: string,

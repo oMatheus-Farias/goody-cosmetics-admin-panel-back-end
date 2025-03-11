@@ -1,5 +1,8 @@
+import { randomBytes } from 'node:crypto';
+
 import type { $Enums, Prisma, User } from '@prisma/client';
 
+import type { ICreateUsersDto } from '../../../use-cases/users/dtos/create-users-dto';
 import { UsersRepository } from '../interfaces';
 
 export class InMemoryUsersRepository implements UsersRepository {
@@ -55,8 +58,18 @@ export class InMemoryUsersRepository implements UsersRepository {
       },
     };
   }
-  async create(data: Prisma.UserCreateInput): Promise<void> {
-    this.items.push(data as User);
+  async create(data: ICreateUsersDto): Promise<void> {
+    this.items.push({
+      id: randomBytes(16).toString('hex'),
+      firstName: data.firstName,
+      lastName: data.lastName,
+      email: data.email,
+      passwordHash: data.password,
+      role: data.role,
+      resetToken: null,
+      resetTokenExpiresAt: null,
+      createdAt: new Date(),
+    });
   }
   async update(userId: string, data: Prisma.UserUpdateInput): Promise<void> {
     const user = this.items.find((user) => user.id === userId);

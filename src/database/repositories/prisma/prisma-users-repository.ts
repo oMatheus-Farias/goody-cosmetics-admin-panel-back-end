@@ -1,6 +1,7 @@
 import type { Prisma, User } from '@prisma/client';
 
 import { prisma } from '../../../app';
+import type { ICreateUsersDto } from '../../../use-cases/users/dtos/create-users-dto';
 import { UsersRepository } from '../interfaces';
 
 export class PrismaUsersRepository implements UsersRepository {
@@ -118,9 +119,15 @@ export class PrismaUsersRepository implements UsersRepository {
       },
     };
   }
-  async create(data: Prisma.UserCreateInput): Promise<void> {
+  async create(data: ICreateUsersDto): Promise<void> {
     await prisma.user.create({
-      data,
+      data: {
+        firstName: data.firstName,
+        lastName: data.lastName,
+        email: data.email,
+        passwordHash: data.password,
+        role: data?.role,
+      },
     });
   }
   async update(userId: string, data: Prisma.UserUpdateInput): Promise<void> {
