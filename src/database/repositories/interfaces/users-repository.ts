@@ -15,7 +15,7 @@ type TFindAllWithParams = {
 export interface UsersRepository {
   findById(
     userId: string,
-  ): Promise<Pick<User, 'id' | 'firstName' | 'lastName'> | null>;
+  ): Promise<Pick<User, 'id' | 'firstName' | 'lastName' | 'role'> | null>;
   findByNames(
     firstName: string,
     lastName: string,

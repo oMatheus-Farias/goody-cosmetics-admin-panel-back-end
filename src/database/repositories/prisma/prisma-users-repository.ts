@@ -7,7 +7,7 @@ import { UsersRepository } from '../interfaces';
 export class PrismaUsersRepository implements UsersRepository {
   async findById(
     userId: string,
-  ): Promise<Pick<User, 'id' | 'firstName' | 'lastName'> | null> {
+  ): Promise<Pick<User, 'id' | 'firstName' | 'lastName' | 'role'> | null> {
     return await prisma.user.findUnique({
       where: {
         id: userId,
@@ -16,6 +16,7 @@ export class PrismaUsersRepository implements UsersRepository {
         id: true,
         firstName: true,
         lastName: true,
+        role: true,
       },
     });
   }
