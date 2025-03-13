@@ -48,8 +48,14 @@ export class InMemoryRefreshTokensRepository
   async create(
     data: Prisma.RefreshTokenCreateInput,
   ): Promise<Pick<RefreshToken, 'id'>> {
-    this.items.push(data as unknown as RefreshToken);
-    const refreshToken = this.items[this.items.length - 1];
+    const refreshToken: RefreshToken = {
+      id: crypto.randomUUID(),
+      userId: data.user.connect?.id as string,
+      expiresAt: data.expiresAt as Date,
+      createdAt: new Date(),
+    };
+
+    this.items.push(refreshToken);
     return { id: refreshToken.id };
   }
   async deleteAll(userId: string): Promise<void> {
