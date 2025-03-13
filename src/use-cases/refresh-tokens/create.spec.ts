@@ -78,4 +78,18 @@ describe('Create RefreshTokens', () => {
       NotFoundError,
     );
   });
+
+  it('should throw error if user not exists', async () => {
+    const { refreshToken } = await authUsersUseCase.execute({
+      email: userData.email,
+      password: userData.password,
+    });
+
+    const user = await usersRepo.findByEmail(userData.email);
+    await usersRepo.delete(user!.id as string);
+
+    await expect(sut.execute(refreshToken)).rejects.toBeInstanceOf(
+      NotFoundError,
+    );
+  });
 });
