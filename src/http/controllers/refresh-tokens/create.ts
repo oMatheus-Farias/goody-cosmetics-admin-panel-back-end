@@ -13,11 +13,25 @@ export async function createRefreshTokensController(
     await refreshTokensSchema.parseAsync({ refreshTokenId });
 
     const createRefreshTokensUseCase = makeCreateRefreshTokensUseCase();
-    await createRefreshTokensUseCase.execute(refreshTokenId);
+    const { refreshToken, user } =
+      await createRefreshTokensUseCase.execute(refreshTokenId);
 
-    //TODO: implement new token generation
+    const token = await reply.jwtSign(
+      {
+        role: user.role,
+      },
+      {
+        sign: {
+          sub: user.id,
+          expiresIn: '1h',
+        },
+      },
+    );
 
-    return reply.status(201).send();
+    return reply.status(201).send({
+      refreshToken,
+      token,
+    });
   } catch (error) {
     if (error instanceof NotFoundError) {
       return reply.status(404).send({ error: error.message });
