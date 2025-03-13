@@ -14,6 +14,7 @@ import type {
   RefreshTokensRepository,
   UsersRepository,
 } from '../../database/repositories/interfaces';
+import { NotFoundError } from '../../errors';
 import { AuthUsersUseCase } from '../sessions/auth-users';
 import { CreateUsersUseCase } from '../users/create';
 import { CreateRefreshTokensUseCase } from './create';
@@ -65,5 +66,16 @@ describe('Create RefreshTokens', () => {
     await sut.execute(refreshToken);
 
     expect(refreshToken).toStrictEqual(expect.any(String));
+  });
+
+  it('should throw error if refresh token not exists', async () => {
+    await authUsersUseCase.execute({
+      email: userData.email,
+      password: userData.password,
+    });
+
+    await expect(sut.execute('invalid-refresh-token')).rejects.toBeInstanceOf(
+      NotFoundError,
+    );
   });
 });
