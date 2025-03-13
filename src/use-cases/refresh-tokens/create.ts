@@ -13,19 +13,19 @@ export class CreateRefreshTokensUseCase {
   ) {}
 
   async execute(refreshTokenId: string): Promise<IReturnUseCaseData> {
-    const refreshTokens = await this.refreshTokensRepo.findById(refreshTokenId);
+    const refreshToken = await this.refreshTokensRepo.findById(refreshTokenId);
 
-    if (!refreshTokens) {
+    if (!refreshToken) {
       throw new NotFoundError('Refresh token not found');
     }
 
-    if (Date.now() > refreshTokens.expiresAt.getTime()) {
-      await this.refreshTokensRepo.deleteAll(refreshTokens.userId);
+    if (Date.now() > refreshToken.expiresAt.getTime()) {
+      await this.refreshTokensRepo.deleteAll(refreshToken.userId);
       throw new CredentialsError('Refresh token expired.');
     }
-    await this.refreshTokensRepo.deleteAll(refreshTokens.userId);
+    await this.refreshTokensRepo.deleteAll(refreshToken.userId);
 
-    const user = await this.usersRepo.findById(refreshTokens.userId);
+    const user = await this.usersRepo.findById(refreshToken.userId);
 
     if (!user) {
       throw new NotFoundError('User not found');
@@ -37,13 +37,13 @@ export class CreateRefreshTokensUseCase {
       expiresAtRefreshToken.getHours() + EXP_TIME_IN_HOURS,
     );
 
-    const { id: refreshToken } = await this.refreshTokensRepo.create({
+    const { id: refreshTokeId } = await this.refreshTokensRepo.create({
       user: { connect: { id: user.id } },
       expiresAt: expiresAtRefreshToken,
     });
 
     return {
-      refreshToken,
+      refreshToken: refreshTokeId,
       user,
     };
   }
