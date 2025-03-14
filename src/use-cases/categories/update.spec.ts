@@ -2,6 +2,7 @@ import { beforeEach, describe, expect, it } from 'vitest';
 
 import { InMemoryCategoriesRepository } from '../../database/repositories/in-memory';
 import type { CategoriesRepository } from '../../database/repositories/interfaces';
+import { NotFoundError } from '../../errors';
 import { CreateCategoriesUseCase } from './create';
 import { UpdateCategoriesUseCase } from './update';
 
@@ -28,5 +29,11 @@ describe('Update Categories', () => {
     const updatedCategory = await categoriesRepo.findById(category!.id);
 
     expect(updatedCategory!.name).toBe('New Category Name');
+  });
+
+  it('should throw error if category not exists', async () => {
+    await expect(
+      sut.execute('invalid-id', { name: 'New Category Name' }),
+    ).rejects.toBeInstanceOf(NotFoundError);
   });
 });
