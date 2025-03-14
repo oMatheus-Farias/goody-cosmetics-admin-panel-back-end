@@ -2,6 +2,7 @@ import type { FastifyInstance } from 'fastify';
 
 import {
   createCategoriesController,
+  deleteCategoriesController,
   findAllCategoriesController,
   findAllCategoriesWithParamsController,
   updateCategoriesController,
@@ -20,5 +21,10 @@ export async function categoriesRoutes(app: FastifyInstance) {
     '/:categoryId',
     { onRequest: [verifyJwt] },
     updateCategoriesController,
+  );
+  app.delete(
+    '/:categoryId',
+    { onRequest: [verifyJwt] },
+    deleteCategoriesController,
   );
 }
