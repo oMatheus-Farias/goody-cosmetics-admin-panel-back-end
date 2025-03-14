@@ -19,7 +19,7 @@ export class InMemoryCategoriesRepository implements CategoriesRepository {
     );
     return category || null;
   }
-  async findAll(): Promise<Category[] | null> {
+  async findAll(): Promise<Pick<Category, 'id' | 'name'>[] | null> {
     return this.items || null;
   }
   async findAllWithParams(
@@ -63,9 +63,6 @@ export class InMemoryCategoriesRepository implements CategoriesRepository {
 
     if (data.name) {
       category.name = data.name as string;
-    }
-    if (data.emoji) {
-      category.emoji = data.emoji as string;
     }
   }
   async delete(categoryId: string): Promise<void> {

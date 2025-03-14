@@ -20,8 +20,11 @@ export class PrismaCategoriesRepository implements CategoriesRepository {
       select: { id: true, name: true },
     });
   }
-  async findAll(): Promise<Category[] | null> {
-    return await prisma.category.findMany();
+  async findAll(): Promise<Pick<Category, 'id' | 'name'>[] | null> {
+    return await prisma.category.findMany({
+      select: { id: true, name: true },
+      orderBy: { name: 'asc' },
+    });
   }
   async findAllWithParams(
     page: number,

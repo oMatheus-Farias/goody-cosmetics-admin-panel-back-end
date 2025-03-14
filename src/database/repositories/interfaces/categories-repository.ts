@@ -15,7 +15,7 @@ export interface CategoriesRepository {
   findByName(
     categoryName: string,
   ): Promise<Pick<Category, 'id' | 'name'> | null>;
-  findAll(): Promise<Category[] | null>;
+  findAll(): Promise<Pick<Category, 'id' | 'name'>[] | null>;
   findAllWithParams(
     page: number,
     searchTerm?: string,
