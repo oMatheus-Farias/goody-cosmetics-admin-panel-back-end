@@ -33,4 +33,11 @@ describe('Find All Categories With Params', () => {
     expect(categories.categories).toHaveLength(2);
     expect(categories.meta).not.toBe(null);
   });
+
+  it('should be able find all categories with search term', async () => {
+    const categories = await sut.execute(0, categoryData1.name);
+
+    expect(categories.categories).toHaveLength(1);
+    expect(categories.meta).not.toBe(null);
+  });
 });
