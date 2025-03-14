@@ -2,7 +2,7 @@ import type { FastifyReply, FastifyRequest } from 'fastify';
 
 import { env } from '../../../configs/env';
 import { findAllCategoriesWithParamsSchema } from '../../../libs/zod-schemas/categories-schemas';
-import { makeFindAllCategoriesWithParamsUseCase } from '../../../use-cases/_factories/categories/make-find-all-with-params-use-case';
+import { makeFindAllCategoriesWithParamsUseCase } from '../../../use-cases/_factories/categories/make-find-all-categories-with-params-use-case';
 
 type TQuery = {
   pageIndex?: string;
