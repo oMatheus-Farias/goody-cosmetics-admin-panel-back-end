@@ -2,6 +2,7 @@ import { beforeEach, describe, expect, it } from 'vitest';
 
 import { InMemoryCategoriesRepository } from '../../database/repositories/in-memory';
 import type { CategoriesRepository } from '../../database/repositories/interfaces';
+import { NotFoundError } from '../../errors';
 import { CreateCategoriesUseCase } from './create';
 import { DeleteCategoriesUseCase } from './delete';
 
@@ -28,5 +29,11 @@ describe('Delete Categories', () => {
     const deletedCategory = await categoriesRepo.findById(category!.id);
 
     expect(deletedCategory).toBe(null);
+  });
+
+  it('should throw error if categories not found', async () => {
+    await expect(sut.execute('invalid-id')).rejects.toBeInstanceOf(
+      NotFoundError,
+    );
   });
 });
