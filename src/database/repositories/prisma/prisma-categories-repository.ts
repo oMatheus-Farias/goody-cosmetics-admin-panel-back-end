@@ -42,6 +42,7 @@ export class PrismaCategoriesRepository implements CategoriesRepository {
       where: {
         name: {
           contains: searchTerm,
+          mode: 'insensitive',
         },
       },
     });
