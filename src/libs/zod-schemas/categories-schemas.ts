@@ -29,3 +29,24 @@ export const findAllCategoriesWithParamsSchema = z.object({
     })
     .optional(),
 });
+
+export const updateCategoriesSchema = z.object({
+  categoryId: z
+    .string({
+      required_error: 'Category ID is required and must be a string',
+    })
+    .uuid({
+      message: 'Category ID must be a valid UUID',
+    }),
+  name: z
+    .string({
+      required_error: 'Name is required and must be a string',
+    })
+    .trim()
+    .min(1, {
+      message: 'Name must have at least 1 character',
+    })
+    .max(25, {
+      message: 'Name must have at most 25 characters',
+    }),
+});
