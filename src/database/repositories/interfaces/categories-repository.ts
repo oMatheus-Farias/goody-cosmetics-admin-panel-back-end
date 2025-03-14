@@ -1,6 +1,6 @@
 import type { Category, Prisma } from '@prisma/client';
 
-type TFindAllWithParams = {
+export type TFindAllWithParams = {
   categories: Category[] | null;
   meta: {
     pageIndex: number;
