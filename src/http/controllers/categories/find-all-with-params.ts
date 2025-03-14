@@ -12,7 +12,7 @@ type TQuery = {
 export async function findAllCategoriesWithParamsController(
   request: FastifyRequest,
   reply: FastifyReply,
-) {
+): Promise<FastifyReply | void> {
   try {
     const { pageIndex, searchTerm } = request.query as TQuery;
     const page = Number(pageIndex) || 0;
