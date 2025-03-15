@@ -10,7 +10,7 @@ import {
 import { verifyJwt } from '../middlewares/verify-jwt';
 
 export async function categoriesRoutes(app: FastifyInstance) {
-  app.get('/', { onRequest: [verifyJwt] }, findAllCategoriesController);
+  app.get('/', findAllCategoriesController);
   app.get(
     '/params',
     { onRequest: [verifyJwt] },
