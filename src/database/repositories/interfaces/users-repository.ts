@@ -2,8 +2,10 @@ import type { Prisma, User } from '@prisma/client';
 
 import type { ICreateUsersDto } from '../../../use-cases/users/dtos/create-users-dto';
 
-type TFindAllWithParams = {
-  users: User[] | null;
+export type TFindAllWithParams = {
+  users:
+    | Pick<User, 'id' | 'firstName' | 'lastName' | 'email' | 'role'>[]
+    | null;
   meta: {
     pageIndex: number;
     limit: number;

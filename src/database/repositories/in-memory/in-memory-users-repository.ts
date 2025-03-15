@@ -4,6 +4,7 @@ import type { $Enums, Prisma, User } from '@prisma/client';
 
 import type { ICreateUsersDto } from '../../../use-cases/users/dtos/create-users-dto';
 import { UsersRepository } from '../interfaces';
+import type { TFindAllWithParams } from '../interfaces/users-repository';
 
 export class InMemoryUsersRepository implements UsersRepository {
   public items: User[] = [];
@@ -30,15 +31,7 @@ export class InMemoryUsersRepository implements UsersRepository {
   async findAllWithParams(
     page: number,
     searchTerm?: string,
-  ): Promise<{
-    users: User[] | null;
-    meta: {
-      pageIndex: number;
-      limit: number;
-      countPerPage: number;
-      totalCount: number;
-    };
-  }> {
+  ): Promise<TFindAllWithParams> {
     const users = searchTerm
       ? this.items.filter(
           (category) =>
@@ -48,8 +41,19 @@ export class InMemoryUsersRepository implements UsersRepository {
       : this.items;
     const count = users.length;
     const totalCount = this.items.length;
+
+    const usersToReturn = users.map((user) => {
+      return {
+        id: user.id,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        role: user.role,
+      };
+    });
+
     return {
-      users,
+      users: usersToReturn,
       meta: {
         pageIndex: page,
         limit: 10,

@@ -2,7 +2,10 @@ import type { Prisma, User } from '@prisma/client';
 
 import { prisma } from '../../../app';
 import type { ICreateUsersDto } from '../../../use-cases/users/dtos/create-users-dto';
-import { UsersRepository } from '../interfaces';
+import type {
+  TFindAllWithParams,
+  UsersRepository,
+} from '../interfaces/users-repository';
 
 export class PrismaUsersRepository implements UsersRepository {
   async findById(
@@ -45,15 +48,7 @@ export class PrismaUsersRepository implements UsersRepository {
   async findAllWithParams(
     page: number,
     searchTerm?: string,
-  ): Promise<{
-    users: User[] | null;
-    meta: {
-      pageIndex: number;
-      limit: number;
-      countPerPage: number;
-      totalCount: number;
-    };
-  }> {
+  ): Promise<TFindAllWithParams> {
     const users = await prisma.user.findMany({
       skip: page * 10,
       take: 10,
@@ -71,6 +66,13 @@ export class PrismaUsersRepository implements UsersRepository {
             },
           },
         ],
+      },
+      select: {
+        id: true,
+        firstName: true,
+        lastName: true,
+        email: true,
+        role: true,
       },
     });
 
