@@ -52,4 +52,11 @@ describe('Find All Users With Params', () => {
     expect(users).toHaveLength(1);
     expect(meta).not.toBe(null);
   });
+
+  it('should be able find all users with last name search term', async () => {
+    const { users, meta } = await sut.execute(0, userData2.lastName);
+
+    expect(users).toHaveLength(2);
+    expect(meta).not.toBe(null);
+  });
 });
