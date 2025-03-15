@@ -21,7 +21,7 @@ const userData = {
   role: 'ADMIN' as $Enums.UserRole,
 };
 
-describe('Update User', () => {
+describe('Update Users', () => {
   beforeEach(async () => {
     usersRepo = new InMemoryUsersRepository();
     passwordHasher = new PasswordHasherAdapter();
