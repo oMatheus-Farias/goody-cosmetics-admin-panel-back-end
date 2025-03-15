@@ -5,6 +5,7 @@ import { PasswordHasherAdapter } from '../../adapters';
 import type { PasswordHasher } from '../../adapters/interfaces';
 import { InMemoryUsersRepository } from '../../database/repositories/in-memory';
 import type { UsersRepository } from '../../database/repositories/interfaces/users-repository';
+import { NotFoundError } from '../../errors';
 import { CreateUsersUseCase } from './create';
 import { UpdateUsersUseCase } from './update';
 
@@ -43,5 +44,11 @@ describe('Update User', () => {
     expect(updatedUser?.firstName).toBe('Jane');
     expect(updatedUser?.lastName).toBe('Do');
     expect(updatedUser?.role).toBe('ROOT');
+  });
+
+  it('should throw error if user not exists', async () => {
+    await expect(
+      sut.execute('invalid-id', { firstName: 'Jane' }),
+    ).rejects.toBeInstanceOf(NotFoundError);
   });
 });
