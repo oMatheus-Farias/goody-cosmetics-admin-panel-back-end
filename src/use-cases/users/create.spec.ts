@@ -4,7 +4,7 @@ import { beforeEach, describe, expect, it } from 'vitest';
 import type { PasswordHasher } from '../../adapters/interfaces/password-hasher';
 import { PasswordHasherAdapter } from '../../adapters/password-hasher-adapter';
 import { InMemoryUsersRepository } from '../../database/repositories/in-memory';
-import type { UsersRepository } from '../../database/repositories/interfaces';
+import { UsersRepository } from '../../database/repositories/interfaces/users-repository';
 import { AlreadyExistsError } from '../../errors';
 import { CreateUsersUseCase } from './create';
 
