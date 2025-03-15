@@ -72,3 +72,42 @@ export const findAllUsersWithParamsSchema = z.object({
     })
     .optional(),
 });
+
+export const updateUsersSchema = z.object({
+  userId: z
+    .string({
+      required_error: 'User ID is required',
+    })
+    .uuid({
+      message: 'Invalid user ID',
+    }),
+  firstName: z
+    .string({
+      required_error: 'First name is required',
+    })
+    .trim()
+    .min(2, {
+      message: 'First name is too short',
+    })
+    .max(55, {
+      message: 'First name is too long',
+    })
+    .optional(),
+  lastName: z
+    .string({
+      required_error: 'Last name is required',
+    })
+    .trim()
+    .min(2, {
+      message: 'Last name is too short',
+    })
+    .max(55, {
+      message: 'Last name is too long',
+    })
+    .optional(),
+  role: z
+    .enum(['ROOT', 'ADMIN'], {
+      required_error: 'Role is required',
+    })
+    .optional(),
+});
