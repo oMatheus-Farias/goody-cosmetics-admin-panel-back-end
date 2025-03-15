@@ -5,7 +5,7 @@ import { PasswordHasherAdapter } from '../../adapters';
 import type { PasswordHasher } from '../../adapters/interfaces';
 import { InMemoryUsersRepository } from '../../database/repositories/in-memory';
 import type { UsersRepository } from '../../database/repositories/interfaces/users-repository';
-import { NotFoundError } from '../../errors';
+import { AlreadyExistsError, NotFoundError } from '../../errors';
 import { CreateUsersUseCase } from './create';
 import { UpdateUsersUseCase } from './update';
 
@@ -50,5 +50,20 @@ describe('Update User', () => {
     await expect(
       sut.execute('invalid-id', { firstName: 'Jane' }),
     ).rejects.toBeInstanceOf(NotFoundError);
+  });
+
+  it('should throw error if names already exists', async () => {
+    const user = await usersRepo.findByEmail(userData.email);
+    await createUsersUseCase.execute({
+      firstName: 'Jane',
+      lastName: 'Doe',
+      email: 'janedoe@email.com',
+      password: 'password',
+      role: 'ADMIN' as $Enums.UserRole,
+    });
+
+    await expect(
+      sut.execute(user!.id, { firstName: 'Jane', lastName: 'Doe' }),
+    ).rejects.toBeInstanceOf(AlreadyExistsError);
   });
 });
