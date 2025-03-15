@@ -58,11 +58,13 @@ export class PrismaUsersRepository implements UsersRepository {
           {
             firstName: {
               contains: searchTerm,
+              mode: 'insensitive',
             },
           },
           {
             lastName: {
               contains: searchTerm,
+              mode: 'insensitive',
             },
           },
         ],
