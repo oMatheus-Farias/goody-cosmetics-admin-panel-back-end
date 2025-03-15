@@ -48,7 +48,7 @@ model Category {
 model Product {
   id            String   @id @default(uuid())
   categoryId    String   @db.VarChar(255)
-  name          String   @db.VarChar(255)
+  name          String   @unique @db.VarChar(255)
   oldPrice      Float    @map("old_price")
   currentPrice  Float    @map("current_price")
   description   String   @db.Text
