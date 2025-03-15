@@ -2,6 +2,7 @@ import type { FastifyInstance } from 'fastify';
 
 import {
   createUsersController,
+  deleteUsersController,
   findAllWithParamsController,
   updateUsersController,
 } from '../controllers/users';
@@ -22,5 +23,10 @@ export async function usersRoutes(app: FastifyInstance) {
     '/:userId',
     { onRequest: [verifyJwt, verifyIfUserRoot] },
     updateUsersController,
+  );
+  app.delete(
+    '/:userId',
+    { onRequest: [verifyJwt, verifyIfUserRoot] },
+    deleteUsersController,
   );
 }
