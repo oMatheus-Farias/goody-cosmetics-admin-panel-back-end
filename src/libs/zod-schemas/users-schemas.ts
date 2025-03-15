@@ -111,3 +111,13 @@ export const updateUsersSchema = z.object({
     })
     .optional(),
 });
+
+export const deleteUsersSchema = z.object({
+  userId: z
+    .string({
+      required_error: 'User ID is required',
+    })
+    .uuid({
+      message: 'Invalid user ID',
+    }),
+});
