@@ -1,5 +1,7 @@
 import type { Prisma, Product } from '@prisma/client';
 
+import type { IProductsImages } from '../../../use-cases/products/interfaces/products-images';
+
 export type TProduct = {
   id: string;
   name: string;
@@ -36,6 +38,7 @@ export interface ProductsRepository {
     searchTerm?: string,
   ): Promise<TFindAllWithParams>;
   create(data: Prisma.ProductCreateInput): Promise<void>;
+  createImages(productId: string, data: IProductsImages): Promise<void>;
   update(productId: string, data: Prisma.ProductUpdateInput): Promise<void>;
   delete(productId: string): Promise<void>;
 }

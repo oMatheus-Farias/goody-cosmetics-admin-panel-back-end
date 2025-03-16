@@ -1,5 +1,6 @@
 import type { Prisma, Product } from '@prisma/client';
 
+import type { IProductsImages } from '../../../use-cases/products/interfaces/products-images';
 import type {
   ProductsRepository,
   TFindAllWithParams,
@@ -48,6 +49,16 @@ export class InMemoryProductsRepository implements ProductsRepository {
   }
   async create(data: Prisma.ProductCreateInput): Promise<void> {
     this.items.push(data as TProduct);
+  }
+  async createImages(productId: string, data: IProductsImages): Promise<void> {
+    const product = this.items.find((product) => product.id === productId);
+    if (!product) {
+      throw new Error('Product not found');
+    }
+
+    data.imageUrls.forEach((imageUrl) => {
+      product.productImage.push({ url: imageUrl });
+    });
   }
   async update(
     productId: string,
