@@ -2,6 +2,7 @@ import fastifyJwt from '@fastify/jwt';
 import fastifyMultipart from '@fastify/multipart';
 import { PrismaClient } from '@prisma/client';
 import Fastify from 'fastify';
+import { createRouteHandler } from 'uploadthing/fastify';
 import { ZodError } from 'zod';
 
 import { env } from './configs/env';
@@ -12,6 +13,7 @@ import {
   sessionsRoutes,
   usersRoutes,
 } from './http/routes';
+import { uploadRouter } from './libs/uploadthing/config-uploadthing';
 
 export const app = Fastify();
 
@@ -25,6 +27,14 @@ app.register(fastifyMultipart, {
   attachFieldsToBody: true,
   limits: {
     fileSize: 10 * 1024 * 1024, // 10MB de limite
+  },
+});
+
+app.register(createRouteHandler, {
+  router: uploadRouter,
+  config: {
+    token: env.UPLOADTHING_TOKEN,
+    logLevel: 'None',
   },
 });
 
