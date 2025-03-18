@@ -2,8 +2,7 @@ import type {
   CategoriesRepository,
   ProductsRepository,
 } from '../../database/repositories/interfaces';
-import { AlreadyExistsError, NotFoundError } from '../../errors';
-import { ConflictError } from '../../errors/conflict-error';
+import { AlreadyExistsError, ConflictError, NotFoundError } from '../../errors';
 import type { IProductsDto } from './dtos/products-dto';
 
 export class CreateProductsUseCase {
@@ -41,10 +40,8 @@ export class CreateProductsUseCase {
     await this.productsRepo
       .create(createdProductData)
       .then(async (product) => {
-        const imageUrls = [data.imageUrl01, data.imageUrl02];
-
         await this.productsRepo.createImages(product.id, {
-          imageUrls,
+          imageUrls: data.imageUrls,
         });
       })
       .catch(() => {
