@@ -1,7 +1,5 @@
-import { randomUUID } from 'node:crypto';
-import path from 'node:path';
-
 import type { FastifyReply, FastifyRequest } from 'fastify';
+import { UTApi } from 'uploadthing/server';
 
 import {
   AlreadyExistsError,
@@ -9,6 +7,7 @@ import {
   NotFoundError,
 } from '../../../errors';
 import { extractCreateProductsFormData } from '../../../functions/extract-create-products-form-data';
+import { processFile } from '../../../functions/process-file';
 import { createProductsSchema } from '../../../libs/zod-schemas/products-schemas';
 import { makeCreateProductsUseCase } from '../../../use-cases/_factories/products/make-create-products-use-case';
 
@@ -24,19 +23,21 @@ export async function createProductsController(
       ...formFields,
     });
 
-    const fieldnameImage01 = formFields.image01.name;
-    const ext1 = path.extname(fieldnameImage01);
-    const newFileNameImage01 = `${fieldnameImage01}-${randomUUID()}${ext1}`;
+    const imageFiles = await Promise.all([
+      processFile(formFields.image01),
+      processFile(formFields.image02),
+    ]);
 
-    const fieldnameImage02 = formFields.image02.name;
-    const ext2 = path.extname(fieldnameImage02);
-    const newFileNameImage02 = `${fieldnameImage02}-${randomUUID()}${ext2}`;
-    // const buffer = await image01.arrayBuffer();
+    const utapi = new UTApi();
 
-    const imageUrls = [
-      `http://fake-url/${newFileNameImage01}`,
-      `http://fake-url/${newFileNameImage02}`,
-    ];
+    const uploads = await Promise.all(
+      imageFiles.map((file) => utapi.uploadFiles(file)),
+    );
+
+    const imageUrls: string[] = [];
+    for (let i = 0; i < uploads.length; i++) {
+      imageUrls.push(uploads[i].data?.ufsUrl as string);
+    }
 
     const createProductsUseCase = makeCreateProductsUseCase();
     await createProductsUseCase.execute({
