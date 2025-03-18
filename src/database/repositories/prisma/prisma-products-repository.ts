@@ -133,9 +133,10 @@ export class PrismaProductsRepository implements ProductsRepository {
       },
     };
   }
-  async create(data: Prisma.ProductCreateInput): Promise<void> {
-    await prisma.product.create({
+  async create(data: Prisma.ProductCreateInput): Promise<Pick<Product, 'id'>> {
+    return await prisma.product.create({
       data,
+      select: { id: true },
     });
   }
   async createImages(productId: string, data: IProductsImages): Promise<void> {

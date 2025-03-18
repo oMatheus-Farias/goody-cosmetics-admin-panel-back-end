@@ -1,3 +1,5 @@
+import { randomBytes } from 'node:crypto';
+
 import type { Prisma, Product } from '@prisma/client';
 
 import type { IProductsImages } from '../../../use-cases/products/interfaces/products-images';
@@ -47,8 +49,22 @@ export class InMemoryProductsRepository implements ProductsRepository {
       },
     };
   }
-  async create(data: Prisma.ProductCreateInput): Promise<void> {
-    this.items.push(data as TProduct);
+  async create(data: Prisma.ProductCreateInput): Promise<Pick<Product, 'id'>> {
+    const product = {
+      id: randomBytes(16).toString('hex'),
+      name: data.name as string,
+      description: data.description as string,
+      currentPrice: data.currentPrice as number,
+      oldPrice: data.oldPrice as number,
+      stockQuantity: data.stockQuantity as number,
+      categories: {
+        id: data.categories.connect?.id as string,
+        name: 'Category',
+      },
+      productImage: [],
+    };
+    this.items.push(product);
+    return { id: product.id };
   }
   async createImages(productId: string, data: IProductsImages): Promise<void> {
     const product = this.items.find((product) => product.id === productId);

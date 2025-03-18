@@ -37,7 +37,7 @@ export interface ProductsRepository {
     page: number,
     searchTerm?: string,
   ): Promise<TFindAllWithParams>;
-  create(data: Prisma.ProductCreateInput): Promise<void>;
+  create(data: Prisma.ProductCreateInput): Promise<Pick<Product, 'id'>>;
   createImages(productId: string, data: IProductsImages): Promise<void>;
   update(productId: string, data: Prisma.ProductUpdateInput): Promise<void>;
   delete(productId: string): Promise<void>;

@@ -38,15 +38,12 @@ export class CreateProductsUseCase {
       stockQuantity: data.stockQuantity,
     };
 
-    //TODO: Add return product when created
     await this.productsRepo
       .create(createdProductData)
-      .then(async () => {
-        const productCreated = await this.productsRepo.findByName(data.name);
-
+      .then(async (product) => {
         const imageUrls = [data.imageUrl01, data.imageUrl02];
 
-        await this.productsRepo.createImages(productCreated!.id, {
+        await this.productsRepo.createImages(product.id, {
           imageUrls,
         });
       })
