@@ -1,5 +1,6 @@
 import type { Prisma, Product } from '@prisma/client';
 
+import type { TOrdenation } from '../../../use-cases/products/interfaces/ordenation-types';
 import type { IProductsImages } from '../../../use-cases/products/interfaces/products-images';
 
 export type TProduct = {
@@ -31,7 +32,7 @@ export type TFindAllWithParams = {
 export interface ProductsRepository {
   findById(productId: string): Promise<Pick<Product, 'id'> | null>;
   findByName(productName: string): Promise<Pick<Product, 'id'> | null>;
-  findAll(): Promise<TProduct[] | null>;
+  findAll(ordernation?: TOrdenation): Promise<TProduct[] | null>;
   findAllByCategory(categoryId: string): Promise<TProduct[] | null>;
   findAllWithParams(
     page: number,

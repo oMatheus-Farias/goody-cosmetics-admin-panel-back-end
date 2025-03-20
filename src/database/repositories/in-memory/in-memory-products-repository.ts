@@ -2,6 +2,7 @@ import { randomBytes } from 'node:crypto';
 
 import type { Prisma, Product } from '@prisma/client';
 
+import type { TOrdenation } from '../../../use-cases/products/interfaces/ordenation-types';
 import type { IProductsImages } from '../../../use-cases/products/interfaces/products-images';
 import type {
   ProductsRepository,
@@ -20,8 +21,20 @@ export class InMemoryProductsRepository implements ProductsRepository {
     const product = this.items.find((product) => product.name === productName);
     return product || null;
   }
-  async findAll(): Promise<TProduct[] | null> {
-    const products = this.items;
+  async findAll(ordernation?: TOrdenation): Promise<TProduct[] | null> {
+    let products = this.items;
+
+    if (ordernation && ordernation === 'LOWER_PRICE') {
+      return (products = this.items.sort(
+        (a, b) => a.currentPrice - b.currentPrice,
+      ));
+    }
+    if (ordernation && ordernation === 'HIGHER_PRICE') {
+      return (products = this.items.sort(
+        (a, b) => b.currentPrice - a.currentPrice,
+      ));
+    }
+
     return products as unknown as Promise<TProduct[] | null>;
   }
   async findAllByCategory(categoryId: string): Promise<TProduct[] | null> {

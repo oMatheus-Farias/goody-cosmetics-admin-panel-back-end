@@ -1,6 +1,7 @@
 import type { Prisma, Product } from '@prisma/client';
 
 import { prisma } from '../../../app';
+import type { TOrdenation } from '../../../use-cases/products/interfaces/ordenation-types';
 import type { IProductsImages } from '../../../use-cases/products/interfaces/products-images';
 import type {
   ProductsRepository,
@@ -21,7 +22,7 @@ export class PrismaProductsRepository implements ProductsRepository {
       select: { id: true },
     });
   }
-  async findAll(): Promise<TProduct[] | null> {
+  async findAll(ordernation?: TOrdenation): Promise<TProduct[] | null> {
     return await prisma.product.findMany({
       select: {
         id: true,
@@ -42,6 +43,18 @@ export class PrismaProductsRepository implements ProductsRepository {
           },
         },
       },
+      orderBy: ordernation
+        ? {
+            currentPrice:
+              ordernation === 'LOWER_PRICE'
+                ? 'asc'
+                : ordernation === 'HIGHER_PRICE'
+                  ? 'desc'
+                  : 'asc',
+          }
+        : {
+            name: 'asc',
+          },
     });
   }
   async findAllByCategory(categoryId: string): Promise<TProduct[] | null> {
