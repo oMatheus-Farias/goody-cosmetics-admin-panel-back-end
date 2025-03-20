@@ -44,17 +44,9 @@ describe('Create Product', () => {
   });
 
   it('should be able create product', async () => {
-    await sut.execute({
-      name: 'Product Name',
-      description: 'Product Description',
-      categoryId: category!.id,
-      oldPrice: 10,
-      currentPrice: 5,
-      stockQuantity: 10,
-      imageUrls: ['http://image-url.com', 'http://image-url.com'],
-    });
+    await sut.execute(productData);
 
-    const product = await productsRepo.findByName('Product Name');
+    const product = await productsRepo.findByName(productData.name);
 
     expect(product).not.toBe(null);
   });
