@@ -1,4 +1,4 @@
-import { Category } from '@prisma/client';
+import type { Category } from '@prisma/client';
 import { beforeEach, describe, expect, it } from 'vitest';
 
 import {
@@ -22,7 +22,7 @@ let category: Pick<Category, 'id' | 'name'> | null;
 let productData: IProductsDto;
 const categoryName = 'Category Name';
 
-describe('Create Product', () => {
+describe('Create Products', () => {
   beforeEach(async () => {
     productsRepo = new InMemoryProductsRepository();
     categoriesRepo = new InMemoryCategoriesRepository();
