@@ -1,5 +1,11 @@
 import { z } from 'zod';
 
+export const findAllProductsSchema = z.object({
+  ordenation: z.enum(['LOWER_PRICE', 'HIGHER_PRICE'], {
+    message: 'Ordernation is required and must be LOWER_PRICE or HIGHER_PRICE',
+  }),
+});
+
 export const createProductsSchema = z.object({
   name: z
     .string({
