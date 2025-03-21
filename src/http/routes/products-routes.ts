@@ -6,6 +6,7 @@ import {
   findAllProductsController,
   findAllProductsWithParamsController,
   findProductsByIdController,
+  updateProductsController,
 } from '../controllers/products';
 import { verifyJwt } from '../middlewares';
 
@@ -19,4 +20,5 @@ export async function productsRoutes(app: FastifyInstance) {
     findAllProductsWithParamsController,
   );
   app.post('/', { onRequest: [verifyJwt] }, createProductsController);
+  app.put('/:productId', { onRequest: [verifyJwt] }, updateProductsController);
 }
