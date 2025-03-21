@@ -48,4 +48,5 @@ export interface ProductsRepository {
   findImagesById(imageId: string): Promise<Pick<ProductImage, 'id'> | null>;
   createImages(productId: string, data: IProductsImages): Promise<void>;
   updateImages(imageId: string, imageUrl: string): Promise<void>;
+  deleteImages(productId: string): Promise<void>;
 }

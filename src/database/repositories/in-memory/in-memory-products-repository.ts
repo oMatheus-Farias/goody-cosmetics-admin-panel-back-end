@@ -167,4 +167,12 @@ export class InMemoryProductsRepository implements ProductsRepository {
       }
     });
   }
+  async deleteImages(productId: string): Promise<void> {
+    const product = this.items.find((product) => product.id === productId);
+    if (!product) {
+      throw new Error('Product not found');
+    }
+
+    product.productImage = [];
+  }
 }

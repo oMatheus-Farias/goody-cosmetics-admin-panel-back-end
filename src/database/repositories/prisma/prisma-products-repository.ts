@@ -213,4 +213,9 @@ export class PrismaProductsRepository implements ProductsRepository {
       },
     });
   }
+  async deleteImages(productId: string): Promise<void> {
+    await prisma.productImage.deleteMany({
+      where: { productId },
+    });
+  }
 }
