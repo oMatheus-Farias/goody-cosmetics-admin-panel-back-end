@@ -2,6 +2,7 @@ import type { FastifyInstance } from 'fastify';
 
 import {
   createProductsController,
+  deleteProductsController,
   findAllProductsByCategoryIdController,
   findAllProductsController,
   findAllProductsWithParamsController,
@@ -26,5 +27,10 @@ export async function productsRoutes(app: FastifyInstance) {
     '/images/:imageId',
     { onRequest: [verifyJwt] },
     updateProductsImagesController,
+  );
+  app.delete(
+    '/:productId',
+    { onRequest: [verifyJwt] },
+    deleteProductsController,
   );
 }
