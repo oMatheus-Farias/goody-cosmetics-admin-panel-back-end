@@ -1,4 +1,4 @@
-import type { Prisma, Product } from '@prisma/client';
+import type { Prisma, Product, ProductImage } from '@prisma/client';
 
 import type { TOrdenation } from '../../../use-cases/products/interfaces/ordenation-types';
 import type { IProductsImages } from '../../../use-cases/products/interfaces/products-images';
@@ -43,12 +43,9 @@ export interface ProductsRepository {
     searchTerm?: string,
   ): Promise<TFindAllWithParams>;
   create(data: Prisma.ProductCreateInput): Promise<Pick<Product, 'id'>>;
-  createImages(productId: string, data: IProductsImages): Promise<void>;
   update(productId: string, data: Prisma.ProductUpdateInput): Promise<void>;
-  updateImages(
-    imageId: string,
-    productId: string,
-    data: IProductsImages,
-  ): Promise<void>;
   delete(productId: string): Promise<void>;
+  findImagesById(imageId: string): Promise<Pick<ProductImage, 'id'> | null>;
+  createImages(productId: string, data: IProductsImages): Promise<void>;
+  updateImages(imageId: string, imageUrl: string): Promise<void>;
 }

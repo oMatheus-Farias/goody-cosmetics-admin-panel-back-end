@@ -1,4 +1,4 @@
-import type { Prisma, Product } from '@prisma/client';
+import type { Prisma, Product, ProductImage } from '@prisma/client';
 
 import { prisma } from '../../../app';
 import type { TOrdenation } from '../../../use-cases/products/interfaces/ordenation-types';
@@ -175,14 +175,6 @@ export class PrismaProductsRepository implements ProductsRepository {
       select: { id: true },
     });
   }
-  async createImages(productId: string, data: IProductsImages): Promise<void> {
-    await prisma.productImage.createMany({
-      data: data.imageUrls.map((imageUrl) => ({
-        url: imageUrl,
-        productId,
-      })),
-    });
-  }
   async update(
     productId: string,
     data: Prisma.ProductUpdateInput,
@@ -192,21 +184,33 @@ export class PrismaProductsRepository implements ProductsRepository {
       data,
     });
   }
-  async updateImages(
-    imageId: string,
-    productId: string,
-    data: IProductsImages,
-  ): Promise<void> {
-    await prisma.productImage.updateMany({
-      where: { id: imageId, productId },
-      data: data.imageUrls.map((imageUrl) => ({
-        url: imageUrl,
-      })),
-    });
-  }
   async delete(productId: string): Promise<void> {
     await prisma.product.delete({
       where: { id: productId },
+    });
+  }
+  async findImagesById(
+    imageId: string,
+  ): Promise<Pick<ProductImage, 'id'> | null> {
+    return await prisma.productImage.findUnique({
+      where: { id: imageId },
+      select: { id: true },
+    });
+  }
+  async createImages(productId: string, data: IProductsImages): Promise<void> {
+    await prisma.productImage.createMany({
+      data: data.imageUrls.map((imageUrl) => ({
+        url: imageUrl,
+        productId,
+      })),
+    });
+  }
+  async updateImages(imageId: string, imageUrl: string): Promise<void> {
+    await prisma.productImage.updateMany({
+      where: { id: imageId },
+      data: {
+        url: imageUrl,
+      },
     });
   }
 }

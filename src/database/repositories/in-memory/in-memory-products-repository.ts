@@ -1,6 +1,6 @@
 import { randomBytes } from 'node:crypto';
 
-import type { Prisma, Product } from '@prisma/client';
+import type { Prisma, Product, ProductImage } from '@prisma/client';
 
 import type { TOrdenation } from '../../../use-cases/products/interfaces/ordenation-types';
 import type { IProductsImages } from '../../../use-cases/products/interfaces/products-images';
@@ -94,19 +94,6 @@ export class InMemoryProductsRepository implements ProductsRepository {
     this.items.push(product);
     return { id: product.id };
   }
-  async createImages(productId: string, data: IProductsImages): Promise<void> {
-    const product = this.items.find((product) => product.id === productId);
-    if (!product) {
-      throw new Error('Product not found');
-    }
-
-    data.imageUrls.forEach((imageUrl) => {
-      product.productImage.push({
-        id: randomBytes(16).toString('hex'),
-        url: imageUrl,
-      });
-    });
-  }
   async update(
     productId: string,
     data: Prisma.ProductUpdateInput,
@@ -132,23 +119,6 @@ export class InMemoryProductsRepository implements ProductsRepository {
       product.stockQuantity = data.stockQuantity as number;
     }
   }
-  async updateImages(
-    imageId: string,
-    productId: string,
-    data: IProductsImages,
-  ): Promise<void> {
-    const product = this.items.find((product) => product.id === productId);
-    if (!product) {
-      throw new Error('Product not found');
-    }
-
-    const image = product.productImage.find((image) => image.id === imageId);
-    if (!image) {
-      throw new Error('Image not found');
-    }
-
-    image.url = data.imageUrls[0];
-  }
   async delete(productId: string): Promise<void> {
     const index = this.items.findIndex((product) => product.id === productId);
     if (index === -1) {
@@ -156,5 +126,45 @@ export class InMemoryProductsRepository implements ProductsRepository {
     }
 
     this.items.splice(index, 1);
+  }
+  async findImagesById(
+    imageId: string,
+  ): Promise<Pick<ProductImage, 'id'> | null> {
+    const product = this.items.find((product) =>
+      product.productImage.find((image) => image.id === imageId),
+    );
+    if (!product) {
+      return null;
+    }
+
+    const image = product.productImage.find((image) => image.id === imageId);
+    return image || null;
+  }
+  async createImages(productId: string, data: IProductsImages): Promise<void> {
+    const product = this.items.find((product) => product.id === productId);
+    if (!product) {
+      throw new Error('Product not found');
+    }
+
+    data.imageUrls.forEach((imageUrl) => {
+      product.productImage.push({
+        id: randomBytes(16).toString('hex'),
+        url: imageUrl,
+      });
+    });
+  }
+  async updateImages(imageId: string, imageUrl: string): Promise<void> {
+    const product = this.items.find((product) =>
+      product.productImage.find((image) => image.id === imageId),
+    );
+    if (!product) {
+      throw new Error('Product not found');
+    }
+
+    product.productImage.forEach((image) => {
+      if (image.id === imageId) {
+        image.url = imageUrl;
+      }
+    });
   }
 }
