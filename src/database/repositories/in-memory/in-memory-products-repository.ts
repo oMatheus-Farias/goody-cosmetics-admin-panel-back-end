@@ -13,7 +13,7 @@ import type {
 export class InMemoryProductsRepository implements ProductsRepository {
   public items: TProduct[] = [];
 
-  async findById(productId: string): Promise<Pick<Product, 'id'> | null> {
+  async findById(productId: string): Promise<TProduct | null> {
     const product = this.items.find((product) => product.id === productId);
     return product || null;
   }

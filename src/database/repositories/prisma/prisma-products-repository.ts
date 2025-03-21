@@ -10,10 +10,28 @@ import type {
 } from '../interfaces';
 
 export class PrismaProductsRepository implements ProductsRepository {
-  async findById(productId: string): Promise<Pick<Product, 'id'> | null> {
+  async findById(productId: string): Promise<TProduct | null> {
     return await prisma.product.findUnique({
       where: { id: productId },
-      select: { id: true },
+      select: {
+        id: true,
+        name: true,
+        description: true,
+        currentPrice: true,
+        oldPrice: true,
+        stockQuantity: true,
+        categories: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+        productImage: {
+          select: {
+            url: true,
+          },
+        },
+      },
     });
   }
   async findByName(productName: string): Promise<Pick<Product, 'id'> | null> {

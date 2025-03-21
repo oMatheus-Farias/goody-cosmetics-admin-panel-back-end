@@ -30,7 +30,7 @@ export type TFindAllWithParams = {
 };
 
 export interface ProductsRepository {
-  findById(productId: string): Promise<Pick<Product, 'id'> | null>;
+  findById(productId: string): Promise<TProduct | null>;
   findByName(productName: string): Promise<Pick<Product, 'id'> | null>;
   findAll(ordernation?: TOrdenation): Promise<TProduct[] | null>;
   findAllByCategory(
