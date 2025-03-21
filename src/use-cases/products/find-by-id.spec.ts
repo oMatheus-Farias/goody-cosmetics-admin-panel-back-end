@@ -9,6 +9,7 @@ import {
   CategoriesRepository,
   ProductsRepository,
 } from '../../database/repositories/interfaces';
+import { NotFoundError } from '../../errors';
 import { CreateCategoriesUseCase } from '../categories/create';
 import { CreateProductsUseCase } from './create';
 import type { IProductsDto } from './dtos/products-dto';
@@ -55,5 +56,11 @@ describe('Find Products By Id', () => {
     const product = await sut.execute(response!.id);
 
     expect(product).not.toBeNull();
+  });
+
+  it('should throw error if product not found', async () => {
+    await expect(sut.execute('invalid-id')).rejects.toBeInstanceOf(
+      NotFoundError,
+    );
   });
 });
