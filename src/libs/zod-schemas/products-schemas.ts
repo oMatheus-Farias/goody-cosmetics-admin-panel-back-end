@@ -7,6 +7,20 @@ export const findAllProductsSchema = z.object({
   }),
 });
 
+export const findAllProductsByCategoryIdSchema = z.object({
+  categoryId: z
+    .string({
+      required_error: 'Category id is required and must be a string',
+    })
+    .uuid({
+      message: 'Category id must be a valid UUID',
+    }),
+  ordenation: z.enum(['A-Z', 'Z-A', 'LOWER_PRICE', 'HIGHER_PRICE'], {
+    message:
+      'Ordernation is required and must be A-Z or Z-A or LOWER_PRICE or HIGHER_PRICE',
+  }),
+});
+
 export const findAllProductsWithParamsSchema = z.object({
   page: z.coerce
     .number({
