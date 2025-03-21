@@ -72,4 +72,9 @@ describe('Find All Products With Params', () => {
     const products = await sut.execute(0, productData2.name);
     expect(products?.products).toHaveLength(1);
   });
+
+  it('should not find any products with invalid search term', async () => {
+    const products = await sut.execute(0, 'Invalid Product Name');
+    expect(products?.products).toHaveLength(0);
+  });
 });
