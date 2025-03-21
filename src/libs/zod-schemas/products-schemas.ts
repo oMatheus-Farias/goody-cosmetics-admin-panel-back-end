@@ -1,8 +1,9 @@
 import { z } from 'zod';
 
 export const findAllProductsSchema = z.object({
-  ordenation: z.enum(['LOWER_PRICE', 'HIGHER_PRICE'], {
-    message: 'Ordernation is required and must be LOWER_PRICE or HIGHER_PRICE',
+  ordenation: z.enum(['A-Z', 'Z-A', 'LOWER_PRICE', 'HIGHER_PRICE'], {
+    message:
+      'Ordernation is required and must be A-Z or Z-A or LOWER_PRICE or HIGHER_PRICE',
   }),
 });
 

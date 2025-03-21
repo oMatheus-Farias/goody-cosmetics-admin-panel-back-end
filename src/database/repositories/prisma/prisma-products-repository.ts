@@ -44,17 +44,10 @@ export class PrismaProductsRepository implements ProductsRepository {
         },
       },
       orderBy: ordernation
-        ? {
-            currentPrice:
-              ordernation === 'LOWER_PRICE'
-                ? 'asc'
-                : ordernation === 'HIGHER_PRICE'
-                  ? 'desc'
-                  : 'asc',
-          }
-        : {
-            name: 'asc',
-          },
+        ? ordernation === 'A-Z' || ordernation === 'Z-A'
+          ? { name: ordernation === 'A-Z' ? 'asc' : 'desc' }
+          : { currentPrice: ordernation === 'LOWER_PRICE' ? 'asc' : 'desc' }
+        : { name: 'asc' },
     });
   }
   async findAllByCategory(categoryId: string): Promise<TProduct[] | null> {
