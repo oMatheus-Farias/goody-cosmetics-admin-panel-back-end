@@ -50,7 +50,10 @@ export class PrismaProductsRepository implements ProductsRepository {
         : { name: 'asc' },
     });
   }
-  async findAllByCategory(categoryId: string): Promise<TProduct[] | null> {
+  async findAllByCategory(
+    categoryId: string,
+    ordernation?: TOrdenation,
+  ): Promise<TProduct[] | null> {
     return await prisma.product.findMany({
       where: {
         categoryId,
@@ -74,6 +77,11 @@ export class PrismaProductsRepository implements ProductsRepository {
           },
         },
       },
+      orderBy: ordernation
+        ? ordernation === 'A-Z' || ordernation === 'Z-A'
+          ? { name: ordernation === 'A-Z' ? 'asc' : 'desc' }
+          : { currentPrice: ordernation === 'LOWER_PRICE' ? 'asc' : 'desc' }
+        : { name: 'asc' },
     });
   }
   async findAllWithParams(

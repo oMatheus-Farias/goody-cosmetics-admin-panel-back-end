@@ -33,7 +33,10 @@ export interface ProductsRepository {
   findById(productId: string): Promise<Pick<Product, 'id'> | null>;
   findByName(productName: string): Promise<Pick<Product, 'id'> | null>;
   findAll(ordernation?: TOrdenation): Promise<TProduct[] | null>;
-  findAllByCategory(categoryId: string): Promise<TProduct[] | null>;
+  findAllByCategory(
+    categoryId: string,
+    ordernation?: TOrdenation,
+  ): Promise<TProduct[] | null>;
   findAllWithParams(
     page: number,
     searchTerm?: string,

@@ -37,11 +37,26 @@ export class InMemoryProductsRepository implements ProductsRepository {
 
     return products as unknown as Promise<TProduct[] | null>;
   }
-  async findAllByCategory(categoryId: string): Promise<TProduct[] | null> {
-    const products = this.items.filter((product) =>
-      product.categories.id.includes(categoryId),
+  async findAllByCategory(
+    categoryId: string,
+    ordernation?: TOrdenation,
+  ): Promise<TProduct[] | null> {
+    let products = this.items.filter(
+      (product) => product.categories.id === categoryId,
     );
-    return products;
+
+    if (ordernation && ordernation === 'LOWER_PRICE') {
+      return (products = products.sort(
+        (a, b) => a.currentPrice - b.currentPrice,
+      ));
+    }
+    if (ordernation && ordernation === 'HIGHER_PRICE') {
+      return (products = products.sort(
+        (a, b) => b.currentPrice - a.currentPrice,
+      ));
+    }
+
+    return products as unknown as Promise<TProduct[] | null>;
   }
   async findAllWithParams(
     page: number,
