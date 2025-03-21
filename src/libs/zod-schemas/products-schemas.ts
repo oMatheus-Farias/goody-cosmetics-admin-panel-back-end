@@ -1,5 +1,15 @@
 import { z } from 'zod';
 
+export const findAllProductsByIdSchema = z.object({
+  productId: z
+    .string({
+      required_error: 'Product id is required and must be a string',
+    })
+    .uuid({
+      message: 'Product id must be a valid UUID',
+    }),
+});
+
 export const findAllProductsSchema = z.object({
   ordenation: z.enum(['A-Z', 'Z-A', 'LOWER_PRICE', 'HIGHER_PRICE'], {
     message:
