@@ -100,3 +100,61 @@ export const createProductsSchema = z.object({
     size: z.number().positive(),
   }),
 });
+
+export const updateProductsSchema = z.object({
+  productId: z
+    .string({
+      required_error: 'Product id is required and must be a string',
+    })
+    .uuid({
+      message: 'Product id must be a valid UUID',
+    }),
+  name: z
+    .string({
+      message: 'Name is required',
+    })
+    .trim()
+    .min(2, {
+      message: 'Name must be at least 2 characters long',
+    })
+    .max(255, {
+      message: 'Name must be at most 255 characters long',
+    })
+    .optional(),
+  description: z
+    .string({
+      message: 'Description is required',
+    })
+    .trim()
+    .min(2, {
+      message: 'Description must be at least 2 characters long',
+    })
+    .optional(),
+  categoryId: z
+    .string({
+      message: 'Category is required',
+    })
+    .uuid({})
+    .optional(),
+  oldPrice: z.coerce
+    .number({
+      message: 'Old price is required',
+    })
+    .positive({
+      message: 'Old price must be a positive number',
+    })
+    .optional(),
+  currentPrice: z.coerce
+    .number({
+      message: 'Current price is required',
+    })
+    .positive({
+      message: 'Current price must be a positive number',
+    })
+    .optional(),
+  stockQuantity: z.coerce
+    .number({
+      message: 'Stock quantity is required',
+    })
+    .optional(),
+});
