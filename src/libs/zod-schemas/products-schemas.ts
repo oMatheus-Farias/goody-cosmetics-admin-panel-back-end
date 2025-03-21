@@ -173,3 +173,13 @@ export const updateProductsImagesSchema = z.object({
     size: z.number().positive(),
   }),
 });
+
+export const deleteProductsSchema = z.object({
+  productId: z
+    .string({
+      required_error: 'Product id is required and must be a string',
+    })
+    .uuid({
+      message: 'Product id must be a valid UUID',
+    }),
+});
