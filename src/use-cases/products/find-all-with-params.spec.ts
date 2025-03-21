@@ -67,4 +67,9 @@ describe('Find All Products With Params', () => {
     const products = await sut.execute(0);
     expect(products?.products).toHaveLength(2);
   });
+
+  it('should be able to find all products with params and search term', async () => {
+    const products = await sut.execute(0, productData2.name);
+    expect(products?.products).toHaveLength(1);
+  });
 });
