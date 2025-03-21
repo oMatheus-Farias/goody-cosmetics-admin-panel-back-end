@@ -5,16 +5,14 @@ import {
   findAllProductsByCategoryIdController,
   findAllProductsController,
   findAllProductsWithParamsController,
+  findProductsByIdController,
 } from '../controllers/products';
 import { verifyJwt } from '../middlewares';
 
 export async function productsRoutes(app: FastifyInstance) {
+  app.get('/:productId', findProductsByIdController);
   app.get('/', findAllProductsController);
-  app.get(
-    '/category/:categoryId',
-    { onRequest: [verifyJwt] },
-    findAllProductsByCategoryIdController,
-  );
+  app.get('/category/:categoryId', findAllProductsByCategoryIdController);
   app.get(
     '/params',
     { onRequest: [verifyJwt] },
