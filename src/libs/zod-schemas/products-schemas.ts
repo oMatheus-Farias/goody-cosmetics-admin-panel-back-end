@@ -158,3 +158,18 @@ export const updateProductsSchema = z.object({
     })
     .optional(),
 });
+
+export const updateProductsImagesSchema = z.object({
+  imageId: z
+    .string({
+      required_error: 'Image id is required and must be a string',
+    })
+    .uuid({
+      message: 'Image id must be a valid UUID',
+    }),
+  productImage: z.object({
+    name: z.string().nonempty(),
+    type: z.string().nonempty(),
+    size: z.number().positive(),
+  }),
+});
