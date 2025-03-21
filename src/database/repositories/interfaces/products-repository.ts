@@ -15,6 +15,7 @@ export type TProduct = {
     name: string;
   };
   productImage: {
+    id: string;
     url: string;
   }[];
 };
@@ -44,5 +45,10 @@ export interface ProductsRepository {
   create(data: Prisma.ProductCreateInput): Promise<Pick<Product, 'id'>>;
   createImages(productId: string, data: IProductsImages): Promise<void>;
   update(productId: string, data: Prisma.ProductUpdateInput): Promise<void>;
+  updateImages(
+    imageId: string,
+    productId: string,
+    data: IProductsImages,
+  ): Promise<void>;
   delete(productId: string): Promise<void>;
 }

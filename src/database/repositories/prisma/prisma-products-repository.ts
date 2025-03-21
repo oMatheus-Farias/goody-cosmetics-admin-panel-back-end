@@ -28,6 +28,7 @@ export class PrismaProductsRepository implements ProductsRepository {
         },
         productImage: {
           select: {
+            id: true,
             url: true,
           },
         },
@@ -57,6 +58,7 @@ export class PrismaProductsRepository implements ProductsRepository {
         },
         productImage: {
           select: {
+            id: true,
             url: true,
           },
         },
@@ -91,6 +93,7 @@ export class PrismaProductsRepository implements ProductsRepository {
         },
         productImage: {
           select: {
+            id: true,
             url: true,
           },
         },
@@ -131,6 +134,7 @@ export class PrismaProductsRepository implements ProductsRepository {
         },
         productImage: {
           select: {
+            id: true,
             url: true,
           },
         },
@@ -186,6 +190,18 @@ export class PrismaProductsRepository implements ProductsRepository {
     await prisma.product.update({
       where: { id: productId },
       data,
+    });
+  }
+  async updateImages(
+    imageId: string,
+    productId: string,
+    data: IProductsImages,
+  ): Promise<void> {
+    await prisma.productImage.updateMany({
+      where: { id: imageId, productId },
+      data: data.imageUrls.map((imageUrl) => ({
+        url: imageUrl,
+      })),
     });
   }
   async delete(productId: string): Promise<void> {

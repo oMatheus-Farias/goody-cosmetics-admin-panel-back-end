@@ -101,7 +101,10 @@ export class InMemoryProductsRepository implements ProductsRepository {
     }
 
     data.imageUrls.forEach((imageUrl) => {
-      product.productImage.push({ url: imageUrl });
+      product.productImage.push({
+        id: randomBytes(16).toString('hex'),
+        url: imageUrl,
+      });
     });
   }
   async update(
@@ -128,6 +131,23 @@ export class InMemoryProductsRepository implements ProductsRepository {
     if (data.stockQuantity) {
       product.stockQuantity = data.stockQuantity as number;
     }
+  }
+  async updateImages(
+    imageId: string,
+    productId: string,
+    data: IProductsImages,
+  ): Promise<void> {
+    const product = this.items.find((product) => product.id === productId);
+    if (!product) {
+      throw new Error('Product not found');
+    }
+
+    const image = product.productImage.find((image) => image.id === imageId);
+    if (!image) {
+      throw new Error('Image not found');
+    }
+
+    image.url = data.imageUrls[0];
   }
   async delete(productId: string): Promise<void> {
     const index = this.items.findIndex((product) => product.id === productId);
