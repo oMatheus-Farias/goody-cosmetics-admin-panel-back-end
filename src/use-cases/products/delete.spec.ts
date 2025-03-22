@@ -9,6 +9,7 @@ import {
   CategoriesRepository,
   ProductsRepository,
 } from '../../database/repositories/interfaces';
+import { NotFoundError } from '../../errors';
 import { CreateCategoriesUseCase } from '../categories/create';
 import { DeleteProductsUseCase } from './delete';
 import type { IProductsDto } from './dtos/products-dto';
@@ -56,5 +57,11 @@ describe('Delete Products', () => {
     const productDeleted = await productsRepo.findByName(productData.name);
 
     expect(productDeleted).toBeNull();
+  });
+
+  it('should throw error if product not exists', async () => {
+    await expect(sut.execute('invalid-id')).rejects.toBeInstanceOf(
+      NotFoundError,
+    );
   });
 });
