@@ -89,7 +89,12 @@ export class InMemoryProductsRepository implements ProductsRepository {
         id: data.categories.connect?.id as string,
         name: 'Category',
       },
-      productImage: [],
+      productImage: [
+        {
+          id: randomBytes(16).toString('hex'),
+          url: 'http://example.com/image.jpg',
+        },
+      ],
     };
     this.items.push(product);
     return { id: product.id };
