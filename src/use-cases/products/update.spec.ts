@@ -20,6 +20,7 @@ let categoriesUseCase: CreateCategoriesUseCase;
 let sut: UpdateProductsUseCase;
 let category: Pick<Category, 'id' | 'name'> | null;
 let productData: IProductsDto;
+let newProductData: Omit<IProductsDto, 'imageUrls'>;
 const categoryName = 'Category Name';
 
 describe('Update Products', () => {
@@ -41,6 +42,14 @@ describe('Update Products', () => {
       stockQuantity: 10,
       imageUrls: ['http://image-url.com', 'http://image-url.com'],
     };
+    newProductData = {
+      name: 'Updated Product Name',
+      description: 'Updated Product Description',
+      categoryId: category!.id,
+      oldPrice: 20,
+      currentPrice: 15,
+      stockQuantity: 20,
+    };
 
     await productsRepo.create({
       ...productData,
@@ -53,14 +62,7 @@ describe('Update Products', () => {
   it('should update a product', async () => {
     const product = await productsRepo.findByName(productData.name);
 
-    await sut.execute(product!.id, {
-      name: 'Updated Product Name',
-      description: 'Updated Product Description',
-      categoryId: category!.id,
-      oldPrice: 20,
-      currentPrice: 15,
-      stockQuantity: 20,
-    });
+    await sut.execute(product!.id, newProductData);
 
     const updatedProduct = await productsRepo.findByName(
       'Updated Product Name',
@@ -73,5 +75,13 @@ describe('Update Products', () => {
     await expect(sut.execute('invalid-id', productData)).rejects.toBeInstanceOf(
       NotFoundError,
     );
+  });
+
+  it('should throw error if category not exists', async () => {
+    const product = await productsRepo.findByName(productData.name);
+
+    await expect(
+      sut.execute(product!.id, { ...newProductData, categoryId: 'invalid-id' }),
+    ).rejects.toBeInstanceOf(NotFoundError);
   });
 });
