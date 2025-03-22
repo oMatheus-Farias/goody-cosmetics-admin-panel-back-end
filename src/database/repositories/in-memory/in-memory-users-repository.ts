@@ -3,8 +3,10 @@ import { randomBytes } from 'node:crypto';
 import type { $Enums, Prisma, User } from '@prisma/client';
 
 import type { ICreateUsersDto } from '../../../use-cases/users/dtos/create-users-dto';
-import { UsersRepository } from '../interfaces';
-import type { TFindAllWithParams } from '../interfaces/users-repository';
+import type {
+  TFindAllWithParams,
+  UsersRepository,
+} from '../interfaces/users-repository';
 
 export class InMemoryUsersRepository implements UsersRepository {
   public items: User[] = [];
