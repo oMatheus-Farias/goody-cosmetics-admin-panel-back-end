@@ -9,7 +9,7 @@ import {
   CategoriesRepository,
   ProductsRepository,
 } from '../../database/repositories/interfaces';
-import { NotFoundError } from '../../errors';
+import { AlreadyExistsError, NotFoundError } from '../../errors';
 import { CreateCategoriesUseCase } from '../categories/create';
 import type { IProductsDto } from './dtos/products-dto';
 import { UpdateProductsUseCase } from './update';
@@ -83,5 +83,20 @@ describe('Update Products', () => {
     await expect(
       sut.execute(product!.id, { ...newProductData, categoryId: 'invalid-id' }),
     ).rejects.toBeInstanceOf(NotFoundError);
+  });
+
+  it('should throw error if product name already exixts', async () => {
+    const product = await productsRepo.findByName(productData.name);
+
+    await productsRepo.create({
+      ...newProductData,
+      categories: {
+        connect: { id: newProductData.categoryId },
+      },
+    });
+
+    await expect(
+      sut.execute(product!.id, newProductData),
+    ).rejects.toBeInstanceOf(AlreadyExistsError);
   });
 });
