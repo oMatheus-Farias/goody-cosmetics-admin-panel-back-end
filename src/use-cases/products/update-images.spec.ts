@@ -9,6 +9,7 @@ import {
   CategoriesRepository,
   ProductsRepository,
 } from '../../database/repositories/interfaces';
+import { NotFoundError } from '../../errors';
 import { CreateCategoriesUseCase } from '../categories/create';
 import type { IProductsDto } from './dtos/products-dto';
 import { UpdateProductsImagesUseCase } from './update-images';
@@ -58,5 +59,13 @@ describe('Update Products Images', () => {
     await expect(
       sut.execute(product?.productImage[0].id as string, newImageUrl),
     ).resolves.toBeUndefined();
+  });
+
+  it('should throw error if image not found', async () => {
+    const newImageUrl = 'http://new-image-url.com';
+
+    await expect(
+      sut.execute('invalid-image-id', newImageUrl),
+    ).rejects.toBeInstanceOf(NotFoundError);
   });
 });
