@@ -5,4 +5,8 @@ export {
   TProduct,
 } from './products-repository';
 export * from './refresh-tokens-repository';
+export {
+  SalesRepository,
+  TFindAllWithParams as SalesTFindAllWithParams,
+} from './sales-repository';
 export { TFindAllWithParams as UsersTFindAllWithParams } from './users-repository';
