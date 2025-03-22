@@ -1,5 +1,4 @@
 import type { FastifyReply, FastifyRequest } from 'fastify';
-import { UTApi } from 'uploadthing/server';
 
 import {
   AlreadyExistsError,
@@ -28,17 +27,6 @@ export async function createProductsController(
       processFile(formFields.image02),
     ]);
 
-    const utapi = new UTApi();
-
-    const uploads = await Promise.all(
-      imageFiles.map((file) => utapi.uploadFiles(file)),
-    );
-
-    const imageUrls: string[] = [];
-    for (let i = 0; i < uploads.length; i++) {
-      imageUrls.push(uploads[i].data?.ufsUrl as string);
-    }
-
     const createProductsUseCase = makeCreateProductsUseCase();
     await createProductsUseCase.execute({
       name: formFields.name,
@@ -47,7 +35,7 @@ export async function createProductsController(
       oldPrice: formFields.oldPrice,
       currentPrice: formFields.currentPrice,
       stockQuantity: formFields.stockQuantity,
-      imageUrls,
+      imageFiles,
     });
 
     return reply.status(201).send({ message: 'Product created' });

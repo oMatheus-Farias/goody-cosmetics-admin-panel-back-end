@@ -1,3 +1,5 @@
+import { UTApi } from 'uploadthing/server';
+
 import type {
   CategoriesRepository,
   ProductsRepository,
@@ -37,12 +39,21 @@ export class CreateProductsUseCase {
       stockQuantity: data.stockQuantity,
     };
 
+    const utapi = new UTApi();
+
+    const uploads = await Promise.all(
+      data.imageFiles.map((file) => utapi.uploadFiles(file)),
+    );
+
+    const imageUrls: string[] = [];
+    for (let i = 0; i < uploads.length; i++) {
+      imageUrls.push(uploads[i].data?.ufsUrl as string);
+    }
+
     await this.productsRepo
       .create(createdProductData)
       .then(async (product) => {
-        await this.productsRepo.createImages(product.id, {
-          imageUrls: data.imageUrls,
-        });
+        await this.productsRepo.createImages(product.id, { imageUrls });
       })
       .catch(() => {
         throw new ConflictError('Error creating product');

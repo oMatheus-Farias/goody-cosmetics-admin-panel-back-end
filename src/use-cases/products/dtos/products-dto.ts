@@ -5,5 +5,5 @@ export interface IProductsDto {
   oldPrice: number;
   currentPrice: number;
   stockQuantity: number;
-  imageUrls: string[];
+  imageFiles: File[];
 }
