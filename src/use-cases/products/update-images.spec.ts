@@ -55,9 +55,12 @@ describe('Update Products Images', () => {
     const product = await productsRepo.findById(response!.id);
 
     const newImageUrl = 'http://new-image-url.com';
+    const mockFile = new File([newImageUrl], 'image.jpg', {
+      type: 'image/jpeg',
+    });
 
     await expect(
-      sut.execute(product?.productImage[0].id as string, newImageUrl),
+      sut.execute(product?.productImage[0].id as string, mockFile),
     ).resolves.toBeUndefined();
   });
 
@@ -65,7 +68,10 @@ describe('Update Products Images', () => {
     const newImageUrl = 'http://new-image-url.com';
 
     await expect(
-      sut.execute('invalid-image-id', newImageUrl),
+      sut.execute(
+        'invalid-image-id',
+        new File([newImageUrl], 'image.jpg', { type: 'image/jpeg' }),
+      ),
     ).rejects.toBeInstanceOf(NotFoundError);
   });
 });
