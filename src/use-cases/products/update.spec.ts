@@ -9,6 +9,7 @@ import {
   CategoriesRepository,
   ProductsRepository,
 } from '../../database/repositories/interfaces';
+import { NotFoundError } from '../../errors';
 import { CreateCategoriesUseCase } from '../categories/create';
 import type { IProductsDto } from './dtos/products-dto';
 import { UpdateProductsUseCase } from './update';
@@ -66,5 +67,11 @@ describe('Update Products', () => {
     );
 
     expect(updatedProduct).not.toBeNull();
+  });
+
+  it('should throw error if product not exists', async () => {
+    await expect(sut.execute('invalid-id', productData)).rejects.toBeInstanceOf(
+      NotFoundError,
+    );
   });
 });
