@@ -1,5 +1,4 @@
 import type { FastifyReply, FastifyRequest } from 'fastify';
-import { UTApi } from 'uploadthing/server';
 
 import { NotFoundError } from '../../../errors';
 import { processFile } from '../../../functions/process-file';
@@ -25,17 +24,10 @@ export async function updateProductsImagesController(
       productImage,
     });
 
-    //TODO: Transfer upload files to use case
     const imageFile = await processFile(productImage);
 
-    const utapi = new UTApi();
-
-    const upload = utapi.uploadFiles(imageFile);
-
-    const imageUrl = (await upload).data?.ufsUrl as string;
-
     const updateProductsImagesUseCase = makeUpdateProductsImagesUseCase();
-    await updateProductsImagesUseCase.execute(imageId, imageUrl);
+    await updateProductsImagesUseCase.execute(imageId, imageFile);
 
     return reply.status(204).send();
   } catch (error) {
