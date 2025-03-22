@@ -38,6 +38,11 @@ describe('Find All Products With Params', () => {
     await categoriesUseCase.execute({ name: categoryName });
     category = await categoriesRepo.findByName(categoryName);
 
+    const mockFiles = [
+      new File(['http://image-url.com'], 'image.jpg', { type: 'image/jpeg' }),
+      new File(['http://image-url.com'], 'image.jpg', { type: 'image/jpeg' }),
+    ];
+
     productData1 = {
       name: 'Product Name',
       description: 'Product Description',
@@ -45,7 +50,7 @@ describe('Find All Products With Params', () => {
       oldPrice: 10,
       currentPrice: 5,
       stockQuantity: 10,
-      imageUrls: ['http://image-url.com', 'http://image-url.com'],
+      imageFiles: mockFiles,
     };
     productData2 = {
       name: 'Product Name 2',
@@ -54,7 +59,7 @@ describe('Find All Products With Params', () => {
       oldPrice: 10,
       currentPrice: 5,
       stockQuantity: 10,
-      imageUrls: ['http://image-url.com', 'http://image-url.com'],
+      imageFiles: mockFiles,
     };
 
     await Promise.all([

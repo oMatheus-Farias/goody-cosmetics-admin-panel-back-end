@@ -33,6 +33,11 @@ describe('Update Products', () => {
     await categoriesUseCase.execute({ name: categoryName });
     category = await categoriesRepo.findByName(categoryName);
 
+    const mockFiles = [
+      new File(['http://image-url.com'], 'image.jpg', { type: 'image/jpeg' }),
+      new File(['http://image-url.com'], 'image.jpg', { type: 'image/jpeg' }),
+    ];
+
     productData = {
       name: 'Product Name',
       description: 'Product Description',
@@ -40,8 +45,9 @@ describe('Update Products', () => {
       oldPrice: 10,
       currentPrice: 5,
       stockQuantity: 10,
-      imageUrls: ['http://image-url.com', 'http://image-url.com'],
+      imageFiles: mockFiles,
     };
+
     newProductData = {
       name: 'Updated Product Name',
       description: 'Updated Product Description',
@@ -49,6 +55,7 @@ describe('Update Products', () => {
       oldPrice: 20,
       currentPrice: 15,
       stockQuantity: 20,
+      imageFiles: mockFiles,
     };
 
     await productsRepo.create({
