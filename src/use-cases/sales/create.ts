@@ -12,12 +12,12 @@ export class CreateSalesUseCase {
   ) {}
 
   async execute(data: ICreateSalesDto): Promise<void> {
-    data.items.forEach(async (items) => {
-      const product = await this.productsRepo.findById(items.productId);
+    for (let i = 0; i < data.items.length; i++) {
+      const product = await this.productsRepo.findById(data.items[i].productId);
       if (!product) {
         throw new NotFoundError('Product not found');
       }
-    });
+    }
 
     await this.salesRepo.create(data);
   }
