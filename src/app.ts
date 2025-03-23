@@ -13,6 +13,7 @@ import {
   sessionsRoutes,
   usersRoutes,
 } from './http/routes';
+import { salesRoutes } from './http/routes/sales-routes';
 import { uploadRouter } from './libs/uploadthing/config-uploadthing';
 
 export const app = Fastify();
@@ -52,6 +53,9 @@ app.register(refreshTokensRoutes, {
 });
 app.register(productsRoutes, {
   prefix: '/api/products',
+});
+app.register(salesRoutes, {
+  prefix: '/api/sales',
 });
 
 app.setErrorHandler((error, _, reply) => {
