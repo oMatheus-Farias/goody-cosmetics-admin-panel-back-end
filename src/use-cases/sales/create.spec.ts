@@ -11,6 +11,7 @@ import type {
   ProductsRepository,
   SalesRepository,
 } from '../../database/repositories/interfaces';
+import { NotFoundError } from '../../errors';
 import { CreateCategoriesUseCase } from '../categories/create';
 import { CreateProductsUseCase } from '../products/create';
 import type { IProductsDto } from '../products/dtos/products-dto';
@@ -74,5 +75,22 @@ describe('Create Sales', () => {
         ],
       }),
     ).toBeUndefined();
+  });
+
+  it('should throw error if product not found', async () => {
+    const product = await productsRepo.findByName('invalid-name');
+
+    await expect(
+      sut.execute({
+        saleDate: new Date(),
+        items: [
+          {
+            productId: product?.id as string,
+            quantity: 1,
+            unitPrice: 5,
+          },
+        ],
+      }),
+    ).rejects.toBeInstanceOf(NotFoundError);
   });
 });
