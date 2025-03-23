@@ -15,6 +15,7 @@ export type TFindAllWithParams = {
 };
 
 export interface SalesRepository {
+  findById(saleId: string): Promise<ISalesData | null>;
   findAllWithParams(
     page: number,
     searchTerm?: string,

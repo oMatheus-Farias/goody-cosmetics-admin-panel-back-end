@@ -3,9 +3,52 @@ import type {
   ICreateSalesDto,
   IUpdateSalesDto,
 } from '../../../use-cases/sales/dtos';
+import { ISalesData } from '../../../use-cases/sales/interfaces/return-sales-data';
 import type { SalesRepository, SalesTFindAllWithParams } from '../interfaces';
 
 export class PrismaSalesRepository implements SalesRepository {
+  async findById(saleId: string): Promise<ISalesData | null> {
+    const sale = await prisma.sale.findUnique({
+      where: {
+        id: saleId,
+      },
+      select: {
+        id: true,
+        saleDate: true,
+        saleItem: {
+          select: {
+            id: true,
+            quantity: true,
+            unitPrice: true,
+            product: {
+              select: {
+                name: true,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    if (!sale) {
+      return null;
+    }
+
+    return {
+      id: sale.id,
+      saleDate: sale.saleDate,
+      totalPrice: sale.saleItem.reduce(
+        (sum, item) => sum + item.quantity * item.unitPrice,
+        0,
+      ),
+      items: sale.saleItem.map((item) => ({
+        saleItemId: item.id,
+        quantity: item.quantity,
+        unitPrice: item.unitPrice,
+        productName: item.product.name,
+      })),
+    };
+  }
   async findAllWithParams(
     page: number,
     searchTerm?: string,

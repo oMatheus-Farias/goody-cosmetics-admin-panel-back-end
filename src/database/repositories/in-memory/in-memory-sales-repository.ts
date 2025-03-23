@@ -10,6 +10,9 @@ import type { SalesRepository, SalesTFindAllWithParams } from '../interfaces';
 export class InMemorySalesRepository implements SalesRepository {
   public items: ISalesData[] = [];
 
+  async findById(saleId: string): Promise<ISalesData | null> {
+    return this.items.find((sale) => sale.id === saleId) || null;
+  }
   async findAllWithParams(
     page: number,
     searchTerm?: string,
