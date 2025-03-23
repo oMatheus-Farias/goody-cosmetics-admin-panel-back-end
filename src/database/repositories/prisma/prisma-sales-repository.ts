@@ -1,9 +1,11 @@
+import type { SaleItem } from '@prisma/client';
+
 import { prisma } from '../../../app';
 import type {
   ICreateSalesDto,
   IUpdateSalesDto,
 } from '../../../use-cases/sales/dtos';
-import { ISalesData } from '../../../use-cases/sales/interfaces/return-sales-data';
+import type { ISalesData } from '../../../use-cases/sales/interfaces/return-sales-data';
 import type { SalesRepository, SalesTFindAllWithParams } from '../interfaces';
 
 export class PrismaSalesRepository implements SalesRepository {
@@ -48,6 +50,13 @@ export class PrismaSalesRepository implements SalesRepository {
         productName: item.product.name,
       })),
     };
+  }
+  async findSalesItemsById(saleItemId: string): Promise<SaleItem | null> {
+    return await prisma.saleItem.findUnique({
+      where: {
+        id: saleItemId,
+      },
+    });
   }
   async findAllWithParams(
     page: number,

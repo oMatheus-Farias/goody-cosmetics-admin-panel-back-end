@@ -1,5 +1,7 @@
 import { randomBytes } from 'node:crypto';
 
+import type { SaleItem } from '@prisma/client';
+
 import type {
   ICreateSalesDto,
   IUpdateSalesDto,
@@ -12,6 +14,27 @@ export class InMemorySalesRepository implements SalesRepository {
 
   async findById(saleId: string): Promise<ISalesData | null> {
     return this.items.find((sale) => sale.id === saleId) || null;
+  }
+  async findSalesItemsById(saleItemId: string): Promise<SaleItem | null> {
+    const sale = this.items.find((sale) =>
+      sale.items.some((item) => item.saleItemId === saleItemId),
+    );
+
+    if (!sale) {
+      return null;
+    }
+
+    const saleItem =
+      sale.items.find((item) => item.saleItemId === saleItemId) || null;
+
+    return {
+      id: saleItem?.saleItemId as string,
+      saleId: sale.id,
+      productId: randomBytes(16).toString('hex'),
+      quantity: saleItem?.quantity as number,
+      unitPrice: saleItem?.unitPrice as number,
+      createdAt: new Date(),
+    };
   }
   async findAllWithParams(
     page: number,
