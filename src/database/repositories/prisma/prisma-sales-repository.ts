@@ -190,6 +190,7 @@ export class PrismaSalesRepository implements SalesRepository {
           return tx.saleItem.update({
             where: {
               id: item.saleItemId,
+              saleId: data.saleId,
             },
             data: {
               quantity: item.quantity,
