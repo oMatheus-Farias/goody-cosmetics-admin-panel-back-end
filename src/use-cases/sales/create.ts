@@ -1,3 +1,5 @@
+import { Sale } from '@prisma/client';
+
 import {
   ProductsRepository,
   SalesRepository,
@@ -11,7 +13,7 @@ export class CreateSalesUseCase {
     private readonly productsRepo: ProductsRepository,
   ) {}
 
-  async execute(data: ICreateSalesDto): Promise<void> {
+  async execute(data: ICreateSalesDto): Promise<Pick<Sale, 'id'>> {
     for (let i = 0; i < data.items.length; i++) {
       const product = await this.productsRepo.findById(data.items[i].productId);
       if (!product) {
@@ -19,6 +21,7 @@ export class CreateSalesUseCase {
       }
     }
 
-    await this.salesRepo.create(data);
+    const sale = await this.salesRepo.create(data);
+    return { id: sale.id };
   }
 }

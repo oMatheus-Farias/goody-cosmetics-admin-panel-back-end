@@ -1,6 +1,6 @@
 import { randomBytes } from 'node:crypto';
 
-import type { SaleItem } from '@prisma/client';
+import type { Sale, SaleItem } from '@prisma/client';
 
 import type {
   ICreateSalesDto,
@@ -56,7 +56,7 @@ export class InMemorySalesRepository implements SalesRepository {
       },
     };
   }
-  async create(data: ICreateSalesDto): Promise<void> {
+  async create(data: ICreateSalesDto): Promise<Pick<Sale, 'id'>> {
     const saleItems = data.items.map((item) => ({
       saleItemId: randomBytes(16).toString('hex'),
       productName: `Product-${item.productId}`,
@@ -64,17 +64,19 @@ export class InMemorySalesRepository implements SalesRepository {
       unitPrice: item.unitPrice,
     }));
 
-    this.items.push({
+    const sale = {
       id: randomBytes(16).toString('hex'),
       saleDate: data.saleDate,
       items: saleItems,
       totalPrice: 0,
-    });
+    };
+
+    this.items.push(sale);
+
+    return { id: sale.id };
   }
   async update(data: IUpdateSalesDto): Promise<void> {
-    const sale = this.items.find(
-      (sale) => sale.id === (data.items?.[0].saleItemId as string),
-    );
+    const sale = this.items.find((sale) => sale.id === data.saleId);
 
     if (!sale) {
       throw new Error('Sale not found');

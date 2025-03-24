@@ -1,4 +1,4 @@
-import type { SaleItem } from '@prisma/client';
+import type { Sale, SaleItem } from '@prisma/client';
 
 import { prisma } from '../../../app';
 import type {
@@ -152,11 +152,14 @@ export class PrismaSalesRepository implements SalesRepository {
       },
     };
   }
-  async create(data: ICreateSalesDto): Promise<void> {
-    await prisma.$transaction(async (tx) => {
+  async create(data: ICreateSalesDto): Promise<Pick<Sale, 'id'>> {
+    return await prisma.$transaction(async (tx) => {
       const sale = await tx.sale.create({
         data: {
           saleDate: data.saleDate,
+        },
+        select: {
+          id: true,
         },
       });
 
@@ -172,6 +175,8 @@ export class PrismaSalesRepository implements SalesRepository {
       });
 
       await Promise.all(items);
+
+      return sale;
     });
   }
   async update(data: IUpdateSalesDto): Promise<void> {

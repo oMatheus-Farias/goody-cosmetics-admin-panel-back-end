@@ -1,4 +1,4 @@
-import type { SaleItem } from '@prisma/client';
+import type { Sale, SaleItem } from '@prisma/client';
 
 import type {
   ICreateSalesDto,
@@ -23,7 +23,7 @@ export interface SalesRepository {
     page: number,
     searchTerm?: string,
   ): Promise<TFindAllWithParams>;
-  create(data: ICreateSalesDto): Promise<void>;
+  create(data: ICreateSalesDto): Promise<Pick<Sale, 'id'>>;
   update(data: IUpdateSalesDto): Promise<void>;
   deleteSaleItems(saleItemId: string): Promise<void>;
   deleteSales(saleId: string): Promise<void>;

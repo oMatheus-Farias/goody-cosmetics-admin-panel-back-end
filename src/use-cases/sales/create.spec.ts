@@ -74,7 +74,7 @@ describe('Create Sales', () => {
           },
         ],
       }),
-    ).toBeUndefined();
+    ).toBeDefined();
   });
 
   it('should throw error if product not found', async () => {
