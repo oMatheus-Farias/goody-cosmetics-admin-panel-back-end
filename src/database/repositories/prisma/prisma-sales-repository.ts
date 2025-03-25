@@ -58,6 +58,13 @@ export class PrismaSalesRepository implements SalesRepository {
       },
     });
   }
+  async findSaleItemsBySaleId(saleId: string): Promise<SaleItem[] | null> {
+    return await prisma.saleItem.findMany({
+      where: {
+        saleId,
+      },
+    });
+  }
   async findAllWithParams(
     page: number,
     searchTerm?: string,

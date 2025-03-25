@@ -19,6 +19,7 @@ export type TFindAllWithParams = {
 export interface SalesRepository {
   findById(saleId: string): Promise<ISalesData | null>;
   findSalesItemsById(saleItemId: string): Promise<SaleItem | null>;
+  findSaleItemsBySaleId(saleId: string): Promise<SaleItem[] | null>;
   findAllWithParams(
     page: number,
     searchTerm?: string,

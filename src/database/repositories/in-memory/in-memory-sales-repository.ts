@@ -36,6 +36,22 @@ export class InMemorySalesRepository implements SalesRepository {
       createdAt: new Date(),
     };
   }
+  async findSaleItemsBySaleId(saleId: string): Promise<SaleItem[] | null> {
+    const sale = this.items.find((sale) => sale.id === saleId);
+
+    if (!sale) {
+      return null;
+    }
+
+    return sale.items.map((item) => ({
+      id: item.saleItemId,
+      saleId: sale.id,
+      productId: randomBytes(16).toString('hex'),
+      quantity: item.quantity,
+      unitPrice: item.unitPrice,
+      createdAt: new Date(),
+    }));
+  }
   async findAllWithParams(
     page: number,
     searchTerm?: string,
