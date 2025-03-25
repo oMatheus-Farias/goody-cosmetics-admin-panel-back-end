@@ -11,6 +11,7 @@ import {
   ProductsRepository,
   SalesRepository,
 } from '../../database/repositories/interfaces';
+import { NotFoundError } from '../../errors';
 import { CreateCategoriesUseCase } from '../categories/create';
 import { CreateProductsUseCase } from '../products/create';
 import type { IProductsDto } from '../products/dtos/products-dto';
@@ -83,5 +84,11 @@ describe('Delete Sale Items', () => {
     const deletedSaleItem = await salesRepo.findSalesItemsById(saleItem!.id);
 
     expect(deletedSaleItem).toBeNull();
+  });
+
+  it('should throw an error if the sale item does not exist', async () => {
+    await expect(sut.execute('invalid-id')).rejects.toBeInstanceOf(
+      NotFoundError,
+    );
   });
 });
