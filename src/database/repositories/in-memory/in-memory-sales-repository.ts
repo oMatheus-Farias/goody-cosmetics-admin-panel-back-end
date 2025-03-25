@@ -85,11 +85,24 @@ export class InMemorySalesRepository implements SalesRepository {
     if (data.saleDate) {
       sale.saleDate = data.saleDate;
     }
-    if (data.items?.[0].quantity) {
-      sale.items[0].quantity = data.items?.[0].quantity;
-    }
-    if (data.items?.[0].unitPrice) {
-      sale.items[0].unitPrice = data.items?.[0].unitPrice;
+
+    if (data.items && data.items.length > 0) {
+      for (let i = 0; i < data!.items!.length; i++) {
+        const saleItem = sale.items.find(
+          (item) => item.saleItemId === data.items?.[i]?.saleItemId,
+        );
+
+        if (!saleItem) {
+          throw new Error('Sale Item not found');
+        }
+
+        if (data.items[i].quantity) {
+          saleItem.quantity = data.items[i].quantity as number;
+        }
+        if (data.items[i].unitPrice) {
+          saleItem.unitPrice = data.items[i].unitPrice as number;
+        }
+      }
     }
   }
   async deleteSaleItems(saleItemId: string): Promise<void> {
