@@ -98,3 +98,13 @@ export const updateSalesSchema = z.object({
     )
     .optional(),
 });
+
+export const deleteSalesSchema = z.object({
+  saleId: z
+    .string({
+      required_error: 'Sale ID is required',
+    })
+    .uuid({
+      message: 'Invalid sale ID',
+    }),
+});
