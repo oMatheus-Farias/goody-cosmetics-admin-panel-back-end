@@ -94,6 +94,9 @@ export class PrismaSalesRepository implements SalesRepository {
             },
           },
         },
+        orderBy: {
+          saleDate: 'desc',
+        },
       })
     ).map((sale) => ({
       id: sale.id,
