@@ -77,4 +77,9 @@ describe('Find All Sales With Params', () => {
     const sales = await sut.execute(0);
     expect(sales.sales).toHaveLength(1);
   });
+
+  it('should not find any sales with invalid search term', async () => {
+    const sales = await sut.execute(0, 'Invalid Search Term');
+    expect(sales.sales).toHaveLength(0);
+  });
 });
