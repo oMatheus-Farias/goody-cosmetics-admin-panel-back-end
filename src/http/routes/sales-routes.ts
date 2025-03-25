@@ -2,6 +2,7 @@ import type { FastifyInstance } from 'fastify';
 
 import {
   createSalesController,
+  deleteSalesController,
   findAllSalesWithParamsController,
   updateSalesController,
 } from '../controllers/sales';
@@ -15,4 +16,5 @@ export async function salesRoutes(app: FastifyInstance) {
   );
   app.post('/', { onRequest: [verifyJwt] }, createSalesController);
   app.patch('/:saleId', { onRequest: [verifyJwt] }, updateSalesController);
+  app.delete('/:saleId', { onRequest: [verifyJwt] }, deleteSalesController);
 }
