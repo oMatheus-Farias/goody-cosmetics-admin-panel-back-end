@@ -109,4 +109,22 @@ describe('Update Sales', () => {
       }),
     ).rejects.toBeInstanceOf(NotFoundError);
   });
+
+  it('should throw error if sale item not found', async () => {
+    const saleCreated = await salesRepo.findById(sale!.id);
+
+    await expect(
+      sut.execute({
+        saleId: saleCreated!.id,
+        saleDate: new Date(),
+        items: [
+          {
+            saleItemId: 'invalid-id',
+            quantity: 2,
+            unitPrice: 5,
+          },
+        ],
+      }),
+    ).rejects.toBeInstanceOf(NotFoundError);
+  });
 });
