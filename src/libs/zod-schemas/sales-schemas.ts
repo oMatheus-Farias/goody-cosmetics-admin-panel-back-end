@@ -1,5 +1,21 @@
 import { z } from 'zod';
 
+export const findAllSalesWithParamsSchema = z.object({
+  page: z.coerce
+    .number({
+      required_error: 'Page index is required and must be a number',
+    })
+    .int({
+      message: 'Page index must be an integer',
+    })
+    .optional(),
+  searchTerm: z
+    .string({
+      required_error: 'Search term is required and must be a string',
+    })
+    .optional(),
+});
+
 export const createSalesSchema = z.object({
   saleDate: z
     .string({
