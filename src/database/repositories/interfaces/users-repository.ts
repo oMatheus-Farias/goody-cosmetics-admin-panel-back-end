@@ -18,6 +18,9 @@ export interface UsersRepository {
   findById(
     userId: string,
   ): Promise<Pick<User, 'id' | 'firstName' | 'lastName' | 'role'> | null>;
+  findByIdWithReturnedPassword(
+    userId: string,
+  ): Promise<Pick<User, 'id' | 'passwordHash'> | null>;
   findByNames(
     firstName: string,
     lastName: string,
@@ -29,11 +32,7 @@ export interface UsersRepository {
   ): Promise<TFindAllWithParams>;
   create(data: ICreateUsersDto): Promise<void>;
   update(userId: string, data: Prisma.UserUpdateInput): Promise<void>;
-  updatePassword(
-    userId: string,
-    oldPassword: string,
-    newPassword: string,
-  ): Promise<void>;
+  updatePassword(userId: string, newPassword: string): Promise<void>;
   forgotPassword(
     userId: string,
     resetToken: string,

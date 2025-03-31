@@ -23,6 +23,19 @@ export class PrismaUsersRepository implements UsersRepository {
       },
     });
   }
+  async findByIdWithReturnedPassword(
+    userId: string,
+  ): Promise<Pick<User, 'id' | 'passwordHash'> | null> {
+    return await prisma.user.findUnique({
+      where: {
+        id: userId,
+      },
+      select: {
+        id: true,
+        passwordHash: true,
+      },
+    });
+  }
   async findByNames(
     firstName: string,
     lastName: string,
@@ -143,15 +156,10 @@ export class PrismaUsersRepository implements UsersRepository {
       data,
     });
   }
-  async updatePassword(
-    userId: string,
-    oldPassword: string,
-    newPassword: string,
-  ): Promise<void> {
+  async updatePassword(userId: string, newPassword: string): Promise<void> {
     await prisma.user.update({
       where: {
         id: userId,
-        passwordHash: oldPassword,
       },
       data: {
         passwordHash: newPassword,

@@ -17,6 +17,12 @@ export class InMemoryUsersRepository implements UsersRepository {
     const user = this.items.find((user) => user.id === userId);
     return user || null;
   }
+  async findByIdWithReturnedPassword(
+    userId: string,
+  ): Promise<Pick<User, 'id' | 'passwordHash'> | null> {
+    const user = this.items.find((user) => user.id === userId);
+    return user ? { id: user.id, passwordHash: user.passwordHash } : null;
+  }
   async findByNames(
     firstName: string,
     lastName: string,
@@ -93,17 +99,10 @@ export class InMemoryUsersRepository implements UsersRepository {
       user.role = data.role as $Enums.UserRole;
     }
   }
-  async updatePassword(
-    userId: string,
-    oldPassword: string,
-    newPassword: string,
-  ): Promise<void> {
+  async updatePassword(userId: string, newPassword: string): Promise<void> {
     const user = this.items.find((user) => user.id === userId);
     if (!user) {
       throw new Error('User not found');
-    }
-    if (user.passwordHash !== oldPassword) {
-      throw new Error('Old password is incorrect');
     }
     user.passwordHash = newPassword;
   }
