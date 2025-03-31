@@ -4,6 +4,7 @@ import {
   createUsersController,
   deleteUsersController,
   findAllWithParamsController,
+  updatePasswordController,
   updateUsersController,
 } from '../controllers/users';
 import { verifyIfUserRoot, verifyJwt } from '../middlewares';
@@ -24,6 +25,7 @@ export async function usersRoutes(app: FastifyInstance) {
     { onRequest: [verifyJwt, verifyIfUserRoot] },
     updateUsersController,
   );
+  app.put('/', { onRequest: [verifyJwt] }, updatePasswordController);
   app.delete(
     '/:userId',
     { onRequest: [verifyJwt, verifyIfUserRoot] },
