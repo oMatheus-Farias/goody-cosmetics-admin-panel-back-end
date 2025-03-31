@@ -112,6 +112,50 @@ export const updateUsersSchema = z.object({
     .optional(),
 });
 
+export const updatePasswordSchema = z.object({
+  userId: z
+    .string({
+      required_error: 'User ID is required',
+    })
+    .uuid({
+      message: 'Invalid user ID',
+    }),
+  oldPassword: z
+    .string({
+      required_error: 'Old password is required.',
+    })
+    .min(8, {
+      message: 'Old password must have at least 8 characters.',
+    })
+    .max(255, {
+      message: 'Old password must have at most 255 characters.',
+    })
+    .regex(
+      /^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[!@#$%^&*(),.?";:{}|[~<>=_+-]).{8,}$/,
+      {
+        message:
+          'The old password must have at least one uppercase and one lowercase letter, at least one number and one special character.',
+      },
+    ),
+  newPassword: z
+    .string({
+      required_error: 'New password is required.',
+    })
+    .min(8, {
+      message: 'New password must have at least 8 characters.',
+    })
+    .max(255, {
+      message: 'New password must have at most 255 characters.',
+    })
+    .regex(
+      /^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[!@#$%^&*(),.?";:{}|[~<>=_+-]).{8,}$/,
+      {
+        message:
+          'The new password must have at least one uppercase and one lowercase letter, at least one number and one special character.',
+      },
+    ),
+});
+
 export const deleteUsersSchema = z.object({
   userId: z
     .string({
