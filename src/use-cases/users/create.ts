@@ -1,5 +1,5 @@
 import type { PasswordHasher } from '../../adapters/interfaces/password-hasher';
-import type { UsersRepository } from '../../database/repositories/interfaces';
+import type { UsersRepository } from '../../database/repositories/interfaces/users-repository';
 import { AlreadyExistsError } from '../../errors';
 import type { ICreateUsersDto } from './dtos/create-users-dto';
 

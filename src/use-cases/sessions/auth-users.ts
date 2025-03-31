@@ -1,9 +1,7 @@
 import type { PasswordCompare } from '../../adapters/interfaces/password-compare';
 import { EXP_TIME_IN_HOURS } from '../../constants/exp-time-in-hours';
-import type {
-  RefreshTokensRepository,
-  UsersRepository,
-} from '../../database/repositories/interfaces';
+import type { RefreshTokensRepository } from '../../database/repositories/interfaces';
+import type { UsersRepository } from '../../database/repositories/interfaces/users-repository';
 import { CredentialsError } from '../../errors';
 import type { AuthUsersDto } from './dtos/auth-users-dto';
 import type { IReturnUseCaseData } from './interfaces/return-user-case-data copy';
