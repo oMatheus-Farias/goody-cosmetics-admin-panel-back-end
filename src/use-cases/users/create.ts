@@ -1,6 +1,7 @@
 import type { PasswordHasher } from '../../adapters/interfaces/password-hasher';
 import type { UsersRepository } from '../../database/repositories/interfaces/users-repository';
 import { AlreadyExistsError } from '../../errors';
+import { sendEmail } from '../../libs/nodemailer/config/mail';
 import type { ICreateUsersDto } from './dtos/create-users-dto';
 
 export class CreateUsersUseCase {
@@ -21,8 +22,7 @@ export class CreateUsersUseCase {
       );
     }
 
-    //TODO: remove console.log implementation send email with password
-    console.log('firstPassword', data.password);
+    await sendEmail(data.firstName, data.email, data.password, null);
 
     const firstPasswordHashed = await this.passwordHasher.hash(data.password);
 
