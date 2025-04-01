@@ -8,7 +8,7 @@ import type {
 } from '../../adapters/interfaces';
 import { InMemoryUsersRepository } from '../../database/repositories/in-memory';
 import type { UsersRepository } from '../../database/repositories/interfaces/users-repository';
-import { NotFoundError } from '../../errors';
+import { CredentialsError, NotFoundError } from '../../errors';
 import { CreateUsersUseCase } from './create';
 import { UpdatePasswordUseCase } from './update-password';
 
@@ -54,5 +54,15 @@ describe('Update Password', () => {
     await expect(
       sut.execute(invalidUserId, userData.password, newPassword),
     ).rejects.toBeInstanceOf(NotFoundError);
+  });
+
+  it('should throw error if password is invalid', async () => {
+    const user = await usersRepo.findByEmail(userData.email);
+    const newPassword = 'newPassword';
+    const invalidOldPassword = 'invalidOldPassword';
+
+    await expect(
+      sut.execute(user!.id, invalidOldPassword, newPassword),
+    ).rejects.toBeInstanceOf(CredentialsError);
   });
 });
