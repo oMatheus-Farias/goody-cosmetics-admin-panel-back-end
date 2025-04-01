@@ -48,6 +48,10 @@ export function forgotPasswordTemplete(name: string, token: string) {
       .button-container {
         margin: 20px 0;
       }
+      .button-container a {
+        color: #ffffff;
+        text-decoration: none;
+      }
       .button {
         background-color: #c78c6a;
         color: #f7f7f7;
@@ -58,6 +62,11 @@ export function forgotPasswordTemplete(name: string, token: string) {
         display: inline-block;
         font-size: 16px;
         width: 400px;
+        text-align: center;
+        transition: background-color 0.3s ease;
+        border: none;
+        cursor: pointer;
+        text-decoration: none;
       }
       .button:hover {
         background-color: #af6f49;
