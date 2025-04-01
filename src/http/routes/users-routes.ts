@@ -4,6 +4,7 @@ import {
   createUsersController,
   deleteUsersController,
   findAllWithParamsController,
+  forgotPasswordController,
   updatePasswordController,
   updateUsersController,
 } from '../controllers/users';
@@ -26,6 +27,7 @@ export async function usersRoutes(app: FastifyInstance) {
     updateUsersController,
   );
   app.put('/', { onRequest: [verifyJwt] }, updatePasswordController);
+  app.post('/forgot-password', forgotPasswordController);
   app.delete(
     '/:userId',
     { onRequest: [verifyJwt, verifyIfUserRoot] },
