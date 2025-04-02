@@ -1,5 +1,5 @@
 import type { $Enums } from '@prisma/client';
-import { beforeEach, describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it, Mock, vi } from 'vitest';
 
 import { PasswordCompareAdapter, PasswordHasherAdapter } from '../../adapters';
 import type {
@@ -9,8 +9,13 @@ import type {
 import { InMemoryUsersRepository } from '../../database/repositories/in-memory';
 import type { UsersRepository } from '../../database/repositories/interfaces/users-repository';
 import { CredentialsError, NotFoundError } from '../../errors';
+import { sendEmail } from '../../libs/nodemailer/config/mail';
 import { CreateUsersUseCase } from './create';
 import { UpdatePasswordUseCase } from './update-password';
+
+vi.mock('../../libs/nodemailer/config/mail', () => ({
+  sendEmail: vi.fn(),
+}));
 
 let usersRepo: UsersRepository;
 let passwordCompare: PasswordCompare;
@@ -33,6 +38,7 @@ describe('Update Password', () => {
     createUsersUseCase = new CreateUsersUseCase(usersRepo, passwordHasher);
     sut = new UpdatePasswordUseCase(usersRepo, passwordCompare, passwordHasher);
 
+    (sendEmail as Mock).mockResolvedValue('Email sending success');
     await createUsersUseCase.execute(userData);
   });
 

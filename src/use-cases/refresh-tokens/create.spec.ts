@@ -1,5 +1,5 @@
 import type { $Enums } from '@prisma/client';
-import { beforeEach, describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it, Mock, vi } from 'vitest';
 
 import { PasswordCompareAdapter, PasswordHasherAdapter } from '../../adapters';
 import type {
@@ -10,14 +10,17 @@ import {
   InMemoryRefreshTokensRepository,
   InMemoryUsersRepository,
 } from '../../database/repositories/in-memory';
-import type {
-  RefreshTokensRepository,
-  UsersRepository,
-} from '../../database/repositories/interfaces';
+import type { RefreshTokensRepository } from '../../database/repositories/interfaces';
+import { UsersRepository } from '../../database/repositories/interfaces/users-repository';
 import { NotFoundError } from '../../errors';
+import { sendEmail } from '../../libs/nodemailer/config/mail';
 import { AuthUsersUseCase } from '../sessions/auth-users';
 import { CreateUsersUseCase } from '../users/create';
 import { CreateRefreshTokensUseCase } from './create';
+
+vi.mock('../../libs/nodemailer/config/mail', () => ({
+  sendEmail: vi.fn(),
+}));
 
 let usersRepo: UsersRepository;
 let passwordHasher: PasswordHasher;
@@ -41,6 +44,7 @@ describe('Create RefreshTokens', () => {
     passwordHasher = new PasswordHasherAdapter();
     createUsersUseCase = new CreateUsersUseCase(usersRepo, passwordHasher);
 
+    (sendEmail as Mock).mockResolvedValue('Email sending success');
     await createUsersUseCase.execute({
       ...userData,
       password: userData.password,

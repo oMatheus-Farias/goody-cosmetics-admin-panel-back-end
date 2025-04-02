@@ -1,12 +1,17 @@
 import type { $Enums } from '@prisma/client';
-import { beforeEach, describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it, Mock, vi } from 'vitest';
 
 import { PasswordHasherAdapter } from '../../adapters';
 import type { PasswordHasher } from '../../adapters/interfaces';
 import { InMemoryUsersRepository } from '../../database/repositories/in-memory';
 import { UsersRepository } from '../../database/repositories/interfaces/users-repository';
+import { sendEmail } from '../../libs/nodemailer/config/mail';
 import { CreateUsersUseCase } from './create';
 import { FindAllUsersWithParamsUseCase } from './find-all-with-params';
+
+vi.mock('../../libs/nodemailer/config/mail', () => ({
+  sendEmail: vi.fn(),
+}));
 
 let usersRepo: UsersRepository;
 let passwordHasher: PasswordHasher;
@@ -34,6 +39,7 @@ describe('Find All Users With Params', () => {
     createUsersUseCase = new CreateUsersUseCase(usersRepo, passwordHasher);
     sut = new FindAllUsersWithParamsUseCase(usersRepo);
 
+    (sendEmail as Mock).mockResolvedValue('Email sending success');
     await Promise.all([
       createUsersUseCase.execute(userData1),
       createUsersUseCase.execute(userData2),

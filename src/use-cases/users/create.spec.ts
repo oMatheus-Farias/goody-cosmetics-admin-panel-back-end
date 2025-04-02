@@ -1,12 +1,17 @@
 import type { $Enums } from '@prisma/client';
-import { beforeEach, describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it, Mock, vi } from 'vitest';
 
 import type { PasswordHasher } from '../../adapters/interfaces/password-hasher';
 import { PasswordHasherAdapter } from '../../adapters/password-hasher-adapter';
 import { InMemoryUsersRepository } from '../../database/repositories/in-memory';
 import { UsersRepository } from '../../database/repositories/interfaces/users-repository';
 import { AlreadyExistsError } from '../../errors';
+import { sendEmail } from '../../libs/nodemailer/config/mail';
 import { CreateUsersUseCase } from './create';
+
+vi.mock('../../libs/nodemailer/config/mail', () => ({
+  sendEmail: vi.fn(),
+}));
 
 let usersRepo: UsersRepository;
 let passwordHasher: PasswordHasher;
@@ -30,8 +35,15 @@ describe('Create User', () => {
 
   it('should be able create user', async () => {
     const user = await usersRepo.findByEmail(userData.email);
+    (sendEmail as Mock).mockResolvedValue('Email sending success');
 
     expect(user).not.toBe(null);
+    expect(sendEmail).toHaveBeenCalledWith(
+      userData.firstName,
+      userData.email,
+      userData.password,
+      null,
+    );
   });
 
   it('should throw error if email is already in use', async () => {

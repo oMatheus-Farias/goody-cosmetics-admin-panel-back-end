@@ -1,13 +1,18 @@
 import type { $Enums } from '@prisma/client';
-import { beforeEach, describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it, Mock, vi } from 'vitest';
 
 import { PasswordHasherAdapter } from '../../adapters';
 import type { PasswordHasher } from '../../adapters/interfaces';
 import { InMemoryUsersRepository } from '../../database/repositories/in-memory';
 import type { UsersRepository } from '../../database/repositories/interfaces/users-repository';
 import { NotFoundError } from '../../errors';
+import { sendEmail } from '../../libs/nodemailer/config/mail';
 import { CreateUsersUseCase } from './create';
 import { DeleteUsersUseCase } from './delete';
+
+vi.mock('../../libs/nodemailer/config/mail', () => ({
+  sendEmail: vi.fn(),
+}));
 
 let usersRepo: UsersRepository;
 let passwordHasher: PasswordHasher;
@@ -28,6 +33,7 @@ describe('Delete Users', () => {
     createUsersUseCase = new CreateUsersUseCase(usersRepo, passwordHasher);
     sut = new DeleteUsersUseCase(usersRepo);
 
+    (sendEmail as Mock).mockResolvedValue('Email sending success');
     await createUsersUseCase.execute(userData);
   });
 
