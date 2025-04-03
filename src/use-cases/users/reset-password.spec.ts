@@ -5,6 +5,7 @@ import { PasswordHasherAdapter } from '../../adapters';
 import type { PasswordHasher } from '../../adapters/interfaces';
 import { InMemoryUsersRepository } from '../../database/repositories/in-memory';
 import type { UsersRepository } from '../../database/repositories/interfaces/users-repository';
+import { NotFoundError } from '../../errors';
 import { sendEmail } from '../../libs/nodemailer/config/mail';
 import { CreateUsersUseCase } from './create';
 import { ForgotPasswordUseCase } from './forgot-password';
@@ -50,5 +51,14 @@ describe('Reset Password', () => {
     await expect(
       sut.execute(userData.email, 'resetToken', newPassword),
     ).resolves.toBeUndefined();
+  });
+
+  it('should throw error if user not found', async () => {
+    const invalidEmail = 'invalid-email';
+    const newPassword = 'newPassword';
+
+    await expect(
+      sut.execute(invalidEmail, 'resetToken', newPassword),
+    ).rejects.toBeInstanceOf(NotFoundError);
   });
 });
