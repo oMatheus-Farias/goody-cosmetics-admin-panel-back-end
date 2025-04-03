@@ -47,12 +47,10 @@ describe('Reset Password', () => {
 
   it('should be able to reset password', async () => {
     const newPassword = 'newPassword';
+    const now = new Date();
+    now.setDate(now.getDate() + 1);
 
-    await forgotPasswordUseCase.execute(
-      userData.email,
-      'resetToken',
-      new Date(),
-    );
+    await forgotPasswordUseCase.execute(userData.email, 'resetToken', now);
 
     await expect(
       sut.execute(userData.email, 'resetToken', newPassword),
