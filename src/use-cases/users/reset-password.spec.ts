@@ -5,7 +5,7 @@ import { PasswordHasherAdapter } from '../../adapters';
 import type { PasswordHasher } from '../../adapters/interfaces';
 import { InMemoryUsersRepository } from '../../database/repositories/in-memory';
 import type { UsersRepository } from '../../database/repositories/interfaces/users-repository';
-import { NotFoundError } from '../../errors';
+import { CredentialsError, NotFoundError } from '../../errors';
 import { sendEmail } from '../../libs/nodemailer/config/mail';
 import { CreateUsersUseCase } from './create';
 import { ForgotPasswordUseCase } from './forgot-password';
@@ -60,5 +60,13 @@ describe('Reset Password', () => {
     await expect(
       sut.execute(invalidEmail, 'resetToken', newPassword),
     ).rejects.toBeInstanceOf(NotFoundError);
+  });
+
+  it('should throw error if token is invalid', async () => {
+    const newPassword = 'newPassword';
+
+    await expect(
+      sut.execute(userData.email, 'invalidToken', newPassword),
+    ).rejects.toBeInstanceOf(CredentialsError);
   });
 });
