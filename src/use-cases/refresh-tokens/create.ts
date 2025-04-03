@@ -1,8 +1,6 @@
 import { EXP_TIME_IN_HOURS } from '../../constants/exp-time-in-hours';
-import type {
-  RefreshTokensRepository,
-  UsersRepository,
-} from '../../database/repositories/interfaces';
+import type { RefreshTokensRepository } from '../../database/repositories/interfaces';
+import { UsersRepository } from '../../database/repositories/interfaces/users-repository';
 import { CredentialsError, NotFoundError } from '../../errors';
 import type { IReturnUseCaseData } from './interfaces/return-use-case-data';
 
