@@ -14,7 +14,7 @@ export async function updatePasswordController(
   reply: FastifyReply,
 ): Promise<FastifyReply | void> {
   try {
-    const { sub: userId } = request.user;
+    const { sub: userId } = request.user as { sub: string };
     const { oldPassword, newPassword } = request.body as TBody;
 
     await updatePasswordSchema.parseAsync({
