@@ -69,4 +69,16 @@ describe('Reset Password', () => {
       sut.execute(userData.email, 'invalidToken', newPassword),
     ).rejects.toBeInstanceOf(CredentialsError);
   });
+
+  it('should throw error if token is expired', async () => {
+    const newPassword = 'newPassword';
+    const now = new Date();
+    now.setDate(now.getDate() - 1);
+
+    await forgotPasswordUseCase.execute(userData.email, 'token', now);
+
+    await expect(
+      sut.execute(userData.email, 'token', newPassword),
+    ).rejects.toBeInstanceOf(CredentialsError);
+  });
 });
