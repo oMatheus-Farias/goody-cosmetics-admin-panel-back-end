@@ -48,6 +48,12 @@ describe('Reset Password', () => {
   it('should be able to reset password', async () => {
     const newPassword = 'newPassword';
 
+    await forgotPasswordUseCase.execute(
+      userData.email,
+      'resetToken',
+      new Date(),
+    );
+
     await expect(
       sut.execute(userData.email, 'resetToken', newPassword),
     ).resolves.toBeUndefined();
