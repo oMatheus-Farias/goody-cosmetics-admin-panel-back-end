@@ -1,3 +1,4 @@
+import { fastifyCors } from '@fastify/cors';
 import fastifyJwt from '@fastify/jwt';
 import fastifyMultipart from '@fastify/multipart';
 import { PrismaClient } from '@prisma/client';
@@ -22,6 +23,11 @@ export const prisma = new PrismaClient();
 
 app.register(fastifyJwt, {
   secret: env.JWT_SECRET,
+});
+
+app.register(fastifyCors, {
+  origin: '*',
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
 });
 
 app.register(fastifyMultipart, {
