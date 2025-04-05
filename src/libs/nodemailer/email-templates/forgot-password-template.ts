@@ -1,7 +1,7 @@
 import { env } from '../../../configs/env';
 
 export function forgotPasswordTemplete(name: string, token: string) {
-  const redirectUrl = `${env.APP_URL}/reset-password?token=${token}`;
+  const redirectUrl = `${env.APP_URL}/auth/reset-password?token=${token}`;
 
   return `
   <html lang="pt-br">
