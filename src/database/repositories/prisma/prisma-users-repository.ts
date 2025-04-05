@@ -58,6 +58,13 @@ export class PrismaUsersRepository implements UsersRepository {
       },
     });
   }
+  async findByResetToken(resetToken: string): Promise<User | null> {
+    return await prisma.user.findUnique({
+      where: {
+        resetToken,
+      },
+    });
+  }
   async findAllWithParams(
     page: number,
     searchTerm?: string,

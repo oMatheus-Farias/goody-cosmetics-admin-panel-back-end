@@ -36,6 +36,10 @@ export class InMemoryUsersRepository implements UsersRepository {
     const user = this.items.find((user) => user.email === email);
     return user || null;
   }
+  async findByResetToken(resetToken: string): Promise<User | null> {
+    const user = this.items.find((user) => user.resetToken === resetToken);
+    return user || null;
+  }
   async findAllWithParams(
     page: number,
     searchTerm?: string,
