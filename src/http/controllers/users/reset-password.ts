@@ -5,7 +5,6 @@ import { resetPasswordSchema } from '../../../libs/zod-schemas/users-schemas';
 import { makeResetPasswordUseCase } from '../../../use-cases/_factories/users/make-reset-password-use-case';
 
 type TBody = {
-  email: string;
   token: string;
   newPassword: string;
 };
@@ -15,15 +14,14 @@ export async function resetPasswordController(
   reply: FastifyReply,
 ): Promise<FastifyReply | void> {
   try {
-    const { email, token, newPassword } = request.body as TBody;
+    const { token, newPassword } = request.body as TBody;
     await resetPasswordSchema.parseAsync({
-      email,
       token,
       newPassword,
     });
 
     const resetPasswordUseCase = makeResetPasswordUseCase();
-    await resetPasswordUseCase.execute(email, token, newPassword);
+    await resetPasswordUseCase.execute(token, newPassword);
 
     return reply.status(204).send();
   } catch (error) {

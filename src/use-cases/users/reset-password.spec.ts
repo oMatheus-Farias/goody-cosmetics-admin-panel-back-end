@@ -53,25 +53,17 @@ describe('Reset Password', () => {
     await forgotPasswordUseCase.execute(userData.email, 'resetToken', now);
 
     await expect(
-      sut.execute(userData.email, 'resetToken', newPassword),
+      sut.execute('resetToken', newPassword),
     ).resolves.toBeUndefined();
   });
 
   it('should throw error if user not found', async () => {
-    const invalidEmail = 'invalid-email';
+    const invalidToken = 'invalid-token';
     const newPassword = 'newPassword';
 
-    await expect(
-      sut.execute(invalidEmail, 'resetToken', newPassword),
-    ).rejects.toBeInstanceOf(NotFoundError);
-  });
-
-  it('should throw error if token is invalid', async () => {
-    const newPassword = 'newPassword';
-
-    await expect(
-      sut.execute(userData.email, 'invalidToken', newPassword),
-    ).rejects.toBeInstanceOf(CredentialsError);
+    await expect(sut.execute(invalidToken, newPassword)).rejects.toBeInstanceOf(
+      NotFoundError,
+    );
   });
 
   it('should throw error if token is expired', async () => {
@@ -81,8 +73,8 @@ describe('Reset Password', () => {
 
     await forgotPasswordUseCase.execute(userData.email, 'token', now);
 
-    await expect(
-      sut.execute(userData.email, 'token', newPassword),
-    ).rejects.toBeInstanceOf(CredentialsError);
+    await expect(sut.execute('token', newPassword)).rejects.toBeInstanceOf(
+      CredentialsError,
+    );
   });
 });

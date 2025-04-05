@@ -8,21 +8,11 @@ export class ResetPasswordUseCase {
     private readonly passwordHasher: PasswordHasher,
   ) {}
 
-  async execute(
-    email: string,
-    token: string,
-    newPassword: string,
-  ): Promise<void> {
-    const user = await this.usersRepo.findByEmail(email);
+  async execute(token: string, newPassword: string): Promise<void> {
+    const user = await this.usersRepo.findByResetToken(token);
 
     if (!user) {
       throw new NotFoundError('User not found');
-    }
-
-    const isTokenMatching = user.resetToken === token;
-
-    if (!isTokenMatching) {
-      throw new CredentialsError('Invalid token');
     }
 
     const now = new Date();

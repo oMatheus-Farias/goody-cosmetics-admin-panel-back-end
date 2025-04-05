@@ -167,13 +167,6 @@ export const forgotPasswordSchema = z.object({
 });
 
 export const resetPasswordSchema = z.object({
-  email: z
-    .string({
-      required_error: 'Email is required',
-    })
-    .email({
-      message: 'Invalid email',
-    }),
   token: z
     .string({
       required_error: 'Token is required',
