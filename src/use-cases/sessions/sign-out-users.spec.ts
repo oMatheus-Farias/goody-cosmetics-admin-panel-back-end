@@ -14,6 +14,7 @@ import type {
   RefreshTokensRepository,
   UsersRepository,
 } from '../../database/repositories/interfaces';
+import { NotFoundError } from '../../errors';
 import { sendEmail } from '../../libs/nodemailer/config/mail';
 import { CreateUsersUseCase } from '../users/create';
 import { AuthUsersUseCase } from './auth-users';
@@ -71,5 +72,11 @@ describe('Sign Out Users', () => {
     await expect(sut.execute(user!.id)).resolves.toBeUndefined();
     const refreshToken = await refreshTokensRepo.findAllByUserId(user!.id);
     expect(refreshToken).toHaveLength(0);
+  });
+
+  it('should throw error if user not found', async () => {
+    await expect(sut.execute('invalid-id')).rejects.toBeInstanceOf(
+      NotFoundError,
+    );
   });
 });
