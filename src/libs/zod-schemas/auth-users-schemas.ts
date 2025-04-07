@@ -26,3 +26,13 @@ export const authUsersSchema = z.object({
       },
     ),
 });
+
+export const signOutUsersSchema = z.object({
+  userId: z
+    .string({
+      required_error: 'User ID is required.',
+    })
+    .uuid({
+      message: 'Invalid User ID.',
+    }),
+});
