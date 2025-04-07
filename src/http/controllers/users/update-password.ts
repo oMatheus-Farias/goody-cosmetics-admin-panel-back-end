@@ -31,7 +31,7 @@ export async function updatePasswordController(
       return reply.status(409).send({ error: error.message });
     }
     if (error instanceof CredentialsError) {
-      return reply.status(401).send({ error: error.message });
+      return reply.status(409).send({ error: error.message });
     }
 
     throw error;
