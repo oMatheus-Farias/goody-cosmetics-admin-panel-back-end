@@ -9,4 +9,7 @@ export {
   SalesRepository,
   TFindAllWithParams as SalesTFindAllWithParams,
 } from './sales-repository';
-export { TFindAllWithParams as UsersTFindAllWithParams } from './users-repository';
+export {
+  UsersRepository,
+  TFindAllWithParams as UsersTFindAllWithParams,
+} from './users-repository';
