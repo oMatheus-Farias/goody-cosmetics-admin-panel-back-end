@@ -37,6 +37,16 @@ export const usersSchema = z.object({
     .optional(),
 });
 
+export const findByIdUserSchema = z.object({
+  userId: z
+    .string({
+      required_error: 'User ID is required',
+    })
+    .uuid({
+      message: 'Invalid user ID',
+    }),
+});
+
 export const usersFirstPasswordSchema = z.object({
   password: z
     .string({
