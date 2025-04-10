@@ -5,6 +5,7 @@ import { PasswordHasherAdapter } from '../../adapters';
 import type { PasswordHasher } from '../../adapters/interfaces';
 import { InMemoryUsersRepository } from '../../database/repositories/in-memory';
 import type { UsersRepository } from '../../database/repositories/interfaces';
+import { NotFoundError } from '../../errors';
 import { sendEmail } from '../../libs/nodemailer/config/mail';
 import { CreateUsersUseCase } from './create';
 import { FindByIdUserUseCase } from './find-by-id';
@@ -45,5 +46,13 @@ describe('Find By Id User', () => {
     expect(userByid).toHaveProperty('firstName');
     expect(userByid).toHaveProperty('lastName');
     expect(userByid).toHaveProperty('role');
+  });
+
+  it('should not be able to find user by id if user does not exist', async () => {
+    const userId = 'non-existing-user-id';
+
+    await expect(() => sut.execute(userId)).rejects.toBeInstanceOf(
+      NotFoundError,
+    );
   });
 });
