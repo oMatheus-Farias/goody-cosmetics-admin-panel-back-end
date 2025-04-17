@@ -85,6 +85,7 @@ export class InMemoryProductsRepository implements ProductsRepository {
       currentPrice: data.currentPrice as number,
       oldPrice: data.oldPrice as number,
       stockQuantity: data.stockQuantity as number,
+      createdAt: new Date(),
       categories: {
         id: data.categories.connect?.id as string,
         name: 'Category',

@@ -20,6 +20,7 @@ export class PrismaProductsRepository implements ProductsRepository {
         currentPrice: true,
         oldPrice: true,
         stockQuantity: true,
+        createdAt: true,
         categories: {
           select: {
             id: true,
@@ -50,6 +51,7 @@ export class PrismaProductsRepository implements ProductsRepository {
         currentPrice: true,
         oldPrice: true,
         stockQuantity: true,
+        createdAt: true,
         categories: {
           select: {
             id: true,
@@ -85,6 +87,7 @@ export class PrismaProductsRepository implements ProductsRepository {
         currentPrice: true,
         oldPrice: true,
         stockQuantity: true,
+        createdAt: true,
         categories: {
           select: {
             id: true,
@@ -126,6 +129,7 @@ export class PrismaProductsRepository implements ProductsRepository {
         currentPrice: true,
         oldPrice: true,
         stockQuantity: true,
+        createdAt: true,
         categories: {
           select: {
             id: true,

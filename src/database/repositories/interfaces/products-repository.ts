@@ -10,6 +10,7 @@ export type TProduct = {
   currentPrice: number;
   oldPrice: number;
   stockQuantity: number;
+  createdAt: Date;
   categories: {
     id: string;
     name: string;
