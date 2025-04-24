@@ -44,7 +44,7 @@ export const createSalesSchema = z.object({
         .number({
           required_error: 'Unit price is required',
         })
-        .positive({
+        .min(0, {
           message: 'Unit price must be a positive number',
         }),
     }),
