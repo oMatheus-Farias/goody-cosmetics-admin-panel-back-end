@@ -6,6 +6,7 @@
     "dev": "ts-node-dev --transpile-only src/server.ts",
     "start": "node build/server.js",
     "build": "tsc",
+    "vercel-build": "prisma generate",
     "prepare": "husky install && prisma generate",
     "test": "vitest run",
     "test:watch": "vitest"
