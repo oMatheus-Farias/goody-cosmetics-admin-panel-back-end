@@ -24,7 +24,8 @@ export const findAllProductsByCategoryIdSchema = z.object({
     })
     .uuid({
       message: 'Category id must be a valid UUID',
-    }),
+    })
+    .optional(),
   ordenation: z.enum(['A-Z', 'Z-A', 'LOWER_PRICE', 'HIGHER_PRICE'], {
     message:
       'Ordernation is required and must be A-Z or Z-A or LOWER_PRICE or HIGHER_PRICE',

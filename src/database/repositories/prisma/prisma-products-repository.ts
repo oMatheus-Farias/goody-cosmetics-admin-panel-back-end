@@ -73,13 +73,17 @@ export class PrismaProductsRepository implements ProductsRepository {
     });
   }
   async findAllByCategory(
-    categoryId: string,
+    categoryId?: string,
     ordernation?: TOrdenation,
   ): Promise<TProduct[] | null> {
     return await prisma.product.findMany({
-      where: {
-        categoryId,
-      },
+      where: categoryId
+        ? {
+            categories: {
+              id: categoryId,
+            },
+          }
+        : {},
       select: {
         id: true,
         name: true,

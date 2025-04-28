@@ -15,7 +15,7 @@ import { verifyJwt } from '../middlewares';
 export async function productsRoutes(app: FastifyInstance) {
   app.get('/:productId', findProductsByIdController);
   app.get('/', findAllProductsController);
-  app.get('/category/:categoryId', findAllProductsByCategoryIdController);
+  app.get('/category', findAllProductsByCategoryIdController);
   app.get(
     '/params',
     { onRequest: [verifyJwt] },

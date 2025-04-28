@@ -5,11 +5,8 @@ import { findAllProductsByCategoryIdSchema } from '../../../libs/zod-schemas/pro
 import { makeFindAllProductsByCategoryIdUseCase } from '../../../use-cases/_factories/products/make-find-all-products-by-category-id-use-case';
 import type { TOrdenation } from '../../../use-cases/products/interfaces/ordenation-types';
 
-type TParams = {
-  categoryId: string;
-};
-
 type TQuery = {
+  categoryId?: string;
   ordenation: TOrdenation;
 };
 
@@ -18,7 +15,7 @@ export async function findAllProductsByCategoryIdController(
   reply: FastifyReply,
 ): Promise<FastifyReply | void> {
   try {
-    const { categoryId } = request.params as TParams;
+    const { categoryId } = request.query as TQuery;
     const { ordenation } = request.query as TQuery;
 
     await findAllProductsByCategoryIdSchema.parseAsync({

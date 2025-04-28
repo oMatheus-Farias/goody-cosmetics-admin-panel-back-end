@@ -36,7 +36,7 @@ export interface ProductsRepository {
   findByName(productName: string): Promise<Pick<Product, 'id'> | null>;
   findAll(ordernation?: TOrdenation): Promise<TProduct[] | null>;
   findAllByCategory(
-    categoryId: string,
+    categoryId?: string,
     ordernation?: TOrdenation,
   ): Promise<TProduct[] | null>;
   findAllWithParams(

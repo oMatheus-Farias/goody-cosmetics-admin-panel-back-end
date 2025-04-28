@@ -13,13 +13,15 @@ export class FindAllProductsByCategoryIdUseCase {
   ) {}
 
   async execute(
-    categoryId: string,
+    categoryId?: string,
     ordernation?: TOrdenation,
   ): Promise<TProduct[] | null> {
-    const category = await this.categoriesRepo.findById(categoryId);
+    if (categoryId) {
+      const category = await this.categoriesRepo.findById(categoryId);
 
-    if (!category) {
-      throw new NotFoundError('Category not found');
+      if (!category) {
+        throw new NotFoundError('Category not found');
+      }
     }
 
     return await this.productsRepo.findAllByCategory(categoryId, ordernation);
