@@ -1,3 +1,5 @@
+import sharp from 'sharp';
+import { Readable } from 'stream';
 import { UTApi } from 'uploadthing/server';
 
 import type {
@@ -41,8 +43,36 @@ export class CreateProductsUseCase {
 
     const utapi = new UTApi();
 
+    const compressedFiles = await Promise.all(
+      data.imageFiles.map(async (file) => {
+        const stream = file.stream();
+        const buffer = await this.streamToBuffer(stream as unknown as Readable);
+        const compressedBuffer = await sharp(buffer)
+          .resize(1024)
+          .jpeg({ quality: 80 })
+          .toBuffer();
+
+        return {
+          ...file,
+          buffer: compressedBuffer,
+          stream: Readable.from(compressedBuffer),
+        };
+      }),
+    );
+
     const uploads = await Promise.all(
-      data.imageFiles.map((file) => utapi.uploadFiles(file)),
+      compressedFiles.map((file) => {
+        const currentDate = new Date();
+        const formattedDate = currentDate.toISOString().replace(/[:.]/g, '-');
+        const fileName = `uploaded-file-${formattedDate}.jpg`;
+
+        const fileEsque = new File([file.buffer], fileName, {
+          type: file.type,
+          lastModified: file.lastModified,
+        });
+
+        return utapi.uploadFiles(fileEsque);
+      }),
     );
 
     const imageUrls: string[] = [];
@@ -58,5 +88,20 @@ export class CreateProductsUseCase {
       .catch(() => {
         throw new ConflictError('Error creating product');
       });
+  }
+
+  private async streamToBuffer(stream: Readable): Promise<Buffer> {
+    if (!stream || typeof stream[Symbol.asyncIterator] !== 'function') {
+      console.error('Invalid stream provided:', stream);
+      throw new TypeError(
+        'The provided stream is not a valid Readable stream.',
+      );
+    }
+
+    const chunks: Buffer[] = [];
+    for await (const chunk of stream) {
+      chunks.push(Buffer.from(chunk));
+    }
+    return Buffer.concat(chunks);
   }
 }

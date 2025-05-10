@@ -7,7 +7,7 @@ const f = (0, fastify_1.createUploadthing)();
 exports.uploadRouter = {
     imageUploader: f({
         image: {
-            maxFileSize: '8MB',
+            maxFileSize: '16MB',
             maxFileCount: 2,
         },
     }).onUploadComplete((data) => {
