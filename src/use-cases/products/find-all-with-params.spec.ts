@@ -1,4 +1,6 @@
 import type { Category } from '@prisma/client';
+import fs from 'fs';
+import path from 'path';
 import { beforeEach, describe, expect, it } from 'vitest';
 
 import {
@@ -39,8 +41,24 @@ describe('Find All Products With Params', () => {
     category = await categoriesRepo.findByName(categoryName);
 
     const mockFiles = [
-      new File(['http://image-url.com'], 'image.jpg', { type: 'image/jpeg' }),
-      new File(['http://image-url.com'], 'image.jpg', { type: 'image/jpeg' }),
+      new File(
+        [
+          fs.readFileSync(
+            path.resolve(__dirname, '../../../assets/test-image.jpg'),
+          ),
+        ],
+        'image1.jpg',
+        { type: 'image/jpeg' },
+      ),
+      new File(
+        [
+          fs.readFileSync(
+            path.resolve(__dirname, '../../../assets/test-image.jpg'),
+          ),
+        ],
+        'image2.jpg',
+        { type: 'image/jpeg' },
+      ),
     ];
 
     productData1 = {
