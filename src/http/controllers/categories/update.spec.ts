@@ -34,4 +34,28 @@ describe('Update Category (e2e)', () => {
 
     expect(response.statusCode).toEqual(204);
   });
+
+  it('should not be able to update a category, because the user is not authorized', async () => {
+    const { token } = await createAndAuthenticatedUser({
+      app,
+      firstName: 'Test User 2',
+      lastName: 'Test User 2',
+      email: 'test@test2.com',
+    });
+    await request(app.server)
+      .post('/api/categories')
+      .set('Authorization', `Bearer ${token}`)
+      .send({
+        name: 'Category 1',
+      });
+
+    const categories = await request(app.server).get('/api/categories');
+    const categoryId = categories.body[0].id;
+
+    const response = await request(app.server)
+      .put(`/api/categories/${categoryId}`)
+      .send();
+
+    expect(response.statusCode).toEqual(401);
+  });
 });
