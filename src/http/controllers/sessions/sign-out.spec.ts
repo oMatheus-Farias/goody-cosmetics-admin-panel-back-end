@@ -23,4 +23,10 @@ describe('Sign Out (e2e)', () => {
 
     expect(response.statusCode).toEqual(204);
   });
+
+  it('should not be able to log out of the user session without authentication', async () => {
+    const response = await request(app.server).delete('/api/sessions/sign-out');
+
+    expect(response.statusCode).toEqual(401);
+  });
 });
