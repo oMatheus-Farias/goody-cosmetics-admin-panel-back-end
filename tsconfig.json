@@ -113,6 +113,7 @@
   "exclude": [
     "node_modules",
     "prisma/vitest-environment-prisma",
+    "src/functions/tests",
     "**/*.spec.ts",
     "**/*.test.ts",
     "vitest.config.ts",
