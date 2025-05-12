@@ -112,6 +112,7 @@
   },
   "exclude": [
     "node_modules",
+    "prisma/vitest-environment-prisma",
     "**/*.spec.ts",
     "**/*.test.ts",
     "vitest.config.ts",
