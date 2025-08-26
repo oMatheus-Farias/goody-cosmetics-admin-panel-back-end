@@ -1,6 +1,6 @@
 import { FastifyReply, FastifyRequest } from 'fastify';
 
-import { NotFoundError } from '../../../errors';
+import { ConflictError, NotFoundError } from '../../../errors';
 import { deleteProductsSchema } from '../../../libs/zod-schemas/products-schemas';
 import { makeDeleteProductsUseCase } from '../../../use-cases/_factories/products/make-delete-products-use-case';
 
@@ -23,6 +23,9 @@ export async function deleteProductsController(
   } catch (error) {
     if (error instanceof NotFoundError) {
       return reply.status(404).send({ error: error.message });
+    }
+    if (error instanceof ConflictError) {
+      return reply.status(409).send({ error: error.message });
     }
 
     throw error;

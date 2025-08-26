@@ -51,6 +51,16 @@ export class PrismaSalesRepository implements SalesRepository {
       })),
     };
   }
+  async findByProductId(productId: string): Promise<{ id: string } | null> {
+    return await prisma.saleItem.findFirst({
+      where: {
+        productId,
+      },
+      select: {
+        id: true,
+      },
+    });
+  }
   async findSalesItemsById(saleItemId: string): Promise<SaleItem | null> {
     return await prisma.saleItem.findUnique({
       where: {

@@ -4,10 +4,12 @@ import { beforeEach, describe, expect, it } from 'vitest';
 import {
   InMemoryCategoriesRepository,
   InMemoryProductsRepository,
+  InMemorySalesRepository,
 } from '../../database/repositories/in-memory';
 import {
   CategoriesRepository,
   ProductsRepository,
+  SalesRepository,
 } from '../../database/repositories/interfaces';
 import { NotFoundError } from '../../errors';
 import { CreateCategoriesUseCase } from '../categories/create';
@@ -16,6 +18,7 @@ import type { IProductsDto } from './dtos/products-dto';
 
 let productsRepo: ProductsRepository;
 let categoriesRepo: CategoriesRepository;
+let salesRepo: SalesRepository;
 let categoriesUseCase: CreateCategoriesUseCase;
 let sut: DeleteProductsUseCase;
 let category: Pick<Category, 'id' | 'name'> | null;
@@ -26,8 +29,9 @@ describe('Delete Products', () => {
   beforeEach(async () => {
     productsRepo = new InMemoryProductsRepository();
     categoriesRepo = new InMemoryCategoriesRepository();
+    salesRepo = new InMemorySalesRepository();
     categoriesUseCase = new CreateCategoriesUseCase(categoriesRepo);
-    sut = new DeleteProductsUseCase(productsRepo);
+    sut = new DeleteProductsUseCase(productsRepo, salesRepo);
 
     await categoriesUseCase.execute({ name: categoryName });
     category = await categoriesRepo.findByName(categoryName);

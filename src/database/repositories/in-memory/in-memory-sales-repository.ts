@@ -15,6 +15,19 @@ export class InMemorySalesRepository implements SalesRepository {
   async findById(saleId: string): Promise<ISalesData | null> {
     return this.items.find((sale) => sale.id === saleId) || null;
   }
+  async findByProductId(productId: string): Promise<{ id: string } | null> {
+    const sale = this.items.find((sale) =>
+      sale.items.some((item) => item.productId === productId),
+    );
+
+    if (!sale) {
+      return null;
+    }
+
+    return {
+      id: sale.id,
+    };
+  }
   async findSalesItemsById(saleItemId: string): Promise<SaleItem | null> {
     const sale = this.items.find((sale) =>
       sale.items.some((item) => item.saleItemId === saleItemId),
@@ -30,7 +43,7 @@ export class InMemorySalesRepository implements SalesRepository {
     return {
       id: saleItem?.saleItemId as string,
       saleId: sale.id,
-      productId: randomBytes(16).toString('hex'),
+      productId: saleItem?.productId as string,
       quantity: saleItem?.quantity as number,
       unitPrice: saleItem?.unitPrice as number,
       createdAt: new Date(),
@@ -46,7 +59,7 @@ export class InMemorySalesRepository implements SalesRepository {
     return sale.items.map((item) => ({
       id: item.saleItemId,
       saleId: sale.id,
-      productId: randomBytes(16).toString('hex'),
+      productId: item.productId,
       quantity: item.quantity,
       unitPrice: item.unitPrice,
       createdAt: new Date(),
@@ -75,6 +88,7 @@ export class InMemorySalesRepository implements SalesRepository {
   async create(data: ICreateSalesDto): Promise<Pick<Sale, 'id'>> {
     const saleItems = data.items.map((item) => ({
       saleItemId: randomBytes(16).toString('hex'),
+      productId: item.productId,
       productName: `Product-${item.productId}`,
       quantity: item.quantity,
       unitPrice: item.unitPrice,
