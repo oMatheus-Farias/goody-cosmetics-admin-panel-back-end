@@ -8,6 +8,7 @@
     "build": "tsc",
     "vercel-build": "prisma generate",
     "prepare": "husky install && prisma generate",
+    "typecheck": "tsc --noEmit",
     "test": "vitest run --project integration",
     "test:watch": "vitest --project integration",
     "test:e2e": "vitest run --project e2e",
