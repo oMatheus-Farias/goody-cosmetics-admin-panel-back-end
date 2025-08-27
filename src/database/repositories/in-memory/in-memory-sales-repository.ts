@@ -6,8 +6,20 @@ import type {
   ICreateSalesDto,
   IUpdateSalesDto,
 } from '../../../use-cases/sales/dtos';
-import type { ISalesData } from '../../../use-cases/sales/interfaces/return-sales-data';
 import type { SalesRepository, SalesTFindAllWithParams } from '../interfaces';
+
+interface ISalesData {
+  id: string;
+  saleDate: Date;
+  totalPrice: number;
+  items: {
+    saleItemId: string;
+    productId: string;
+    productName: string;
+    quantity: number;
+    unitPrice: number;
+  }[];
+}
 
 export class InMemorySalesRepository implements SalesRepository {
   public items: ISalesData[] = [];
