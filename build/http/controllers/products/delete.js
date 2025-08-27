@@ -26,6 +26,9 @@ function deleteProductsController(request, reply) {
             if (error instanceof errors_1.NotFoundError) {
                 return reply.status(404).send({ error: error.message });
             }
+            if (error instanceof errors_1.ConflictError) {
+                return reply.status(409).send({ error: error.message });
+            }
             throw error;
         }
     });

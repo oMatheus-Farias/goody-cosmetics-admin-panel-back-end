@@ -20,6 +20,17 @@ class InMemorySalesRepository {
             return this.items.find((sale) => sale.id === saleId) || null;
         });
     }
+    findByProductId(productId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const sale = this.items.find((sale) => sale.items.some((item) => item.productId === productId));
+            if (!sale) {
+                return null;
+            }
+            return {
+                id: sale.id,
+            };
+        });
+    }
     findSalesItemsById(saleItemId) {
         return __awaiter(this, void 0, void 0, function* () {
             const sale = this.items.find((sale) => sale.items.some((item) => item.saleItemId === saleItemId));
@@ -30,7 +41,7 @@ class InMemorySalesRepository {
             return {
                 id: saleItem === null || saleItem === void 0 ? void 0 : saleItem.saleItemId,
                 saleId: sale.id,
-                productId: (0, node_crypto_1.randomBytes)(16).toString('hex'),
+                productId: saleItem === null || saleItem === void 0 ? void 0 : saleItem.productId,
                 quantity: saleItem === null || saleItem === void 0 ? void 0 : saleItem.quantity,
                 unitPrice: saleItem === null || saleItem === void 0 ? void 0 : saleItem.unitPrice,
                 createdAt: new Date(),
@@ -46,7 +57,7 @@ class InMemorySalesRepository {
             return sale.items.map((item) => ({
                 id: item.saleItemId,
                 saleId: sale.id,
-                productId: (0, node_crypto_1.randomBytes)(16).toString('hex'),
+                productId: item.productId,
                 quantity: item.quantity,
                 unitPrice: item.unitPrice,
                 createdAt: new Date(),
@@ -73,6 +84,7 @@ class InMemorySalesRepository {
         return __awaiter(this, void 0, void 0, function* () {
             const saleItems = data.items.map((item) => ({
                 saleItemId: (0, node_crypto_1.randomBytes)(16).toString('hex'),
+                productId: item.productId,
                 productName: `Product-${item.productId}`,
                 quantity: item.quantity,
                 unitPrice: item.unitPrice,

@@ -51,6 +51,18 @@ class PrismaSalesRepository {
             };
         });
     }
+    findByProductId(productId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield app_1.prisma.saleItem.findFirst({
+                where: {
+                    productId,
+                },
+                select: {
+                    id: true,
+                },
+            });
+        });
+    }
     findSalesItemsById(saleItemId) {
         return __awaiter(this, void 0, void 0, function* () {
             return yield app_1.prisma.saleItem.findUnique({
